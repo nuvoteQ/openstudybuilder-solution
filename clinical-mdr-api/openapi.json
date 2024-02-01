@@ -3,7 +3,7 @@
   "info": {
     "title": "Clinical MDR API",
     "description": "\n## NOTICE\n\nThis license information is applicable to the swagger documentation of the clinical-mdr-api, that is the openapi.json.\n\n## License Terms (MIT)\n\nCopyright (C) 2022 Novo Nordisk A/S, Danish company registration no. 24256790\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n## Licenses and Acknowledgements for Incorporated Software\n\nThis component contains software licensed under different licenses when compiled, please refer to the third-party-licenses.md file for further information and full license texts.\n\n## Authentication\n\nSupports OAuth2 [Authorization Code Flow](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1),\nat paths described in the OpenID Connect Discovery metadata document (whose URL is defined by the `OAUTH_METADATA_URL` environment variable).\n\nMicrosoft Identity Platform documentation can be read \n([here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)).\n\nAuthentication can be turned off with `OAUTH_ENABLED=false` environment variable. \n\nWhen authentication is turned on, all requests to API endpoints must provide a valid bearer (JWT) token inside the `Authorization` http header. \n\nWhen authentication is turned off, all endpoints accept (optional) custom header `X-Test-User-Id` which \nallows any request to specify any user id value. If the `X-Test-User-Id` header is missing, the default value of `unknown-user` is assumed.\n\n## System information:\n\nSystem information is provided by a separate [System Information](../system/docs) sub-app which does not require authentication.\n",
-    "version": "3.0.29"
+    "version": "3.0.30"
   },
   "paths": {
     "/concepts/odms/study-events": {
@@ -16964,12 +16964,12 @@
             "in": "path"
           },
           {
-            "description": "If specified, the latest/newest representation of the objective at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\u00b10 is assumed.",
+            "description": "If specified, the latest/newest representation of the objective at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. ",
             "required": false,
             "schema": {
               "title": "At Specified Date Time",
               "type": "string",
-              "description": "If specified, the latest/newest representation of the objective at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\u00b10 is assumed.",
+              "description": "If specified, the latest/newest representation of the objective at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. ",
               "format": "date-time"
             },
             "name": "at_specified_date_time",
@@ -31889,12 +31889,12 @@
             "in": "path"
           },
           {
-            "description": "If specified, the latest/newest representation of the objective at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\u00b10 is assumed.",
+            "description": "If specified, the latest/newest representation of the objective at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. ",
             "required": false,
             "schema": {
               "title": "At Specified Date Time",
               "type": "string",
-              "description": "If specified, the latest/newest representation of the objective at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\u00b10 is assumed.",
+              "description": "If specified, the latest/newest representation of the objective at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. ",
               "format": "date-time"
             },
             "name": "at_specified_date_time",
@@ -39479,12 +39479,12 @@
             "in": "path"
           },
           {
-            "description": "If specified, the latest/newest representation of the timeframe at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\u00b10 is assumed.",
+            "description": "If specified, the latest/newest representation of the timeframe at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. ",
             "required": false,
             "schema": {
               "title": "At Specified Date Time",
               "type": "string",
-              "description": "If specified, the latest/newest representation of the timeframe at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\u00b10 is assumed.",
+              "description": "If specified, the latest/newest representation of the timeframe at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. ",
               "format": "date-time"
             },
             "name": "at_specified_date_time",
@@ -90633,12 +90633,12 @@
             "in": "path"
           },
           {
-            "description": "If specified, the latest/newest representation of the unit definition at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\u00b10 is assumed.",
+            "description": "If specified, the latest/newest representation of the unit definition at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. ",
             "required": false,
             "schema": {
               "title": "At Specified Date Time",
               "type": "string",
-              "description": "If specified, the latest/newest representation of the unit definition at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\u00b10 is assumed.",
+              "description": "If specified, the latest/newest representation of the unit definition at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. ",
               "format": "date-time"
             },
             "name": "at_specified_date_time",
@@ -95771,12 +95771,12 @@
             "in": "path"
           },
           {
-            "description": "If specified, the latest/newest representation of the configuration at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\u00b10 is assumed.",
+            "description": "If specified, the latest/newest representation of the configuration at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. ",
             "required": false,
             "schema": {
               "title": "At Specified Date Time",
               "type": "string",
-              "description": "If specified, the latest/newest representation of the configuration at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\u00b10 is assumed.",
+              "description": "If specified, the latest/newest representation of the configuration at this point in time is returned.\nThe point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. ",
               "format": "date-time"
             },
             "name": "at_specified_date_time",
