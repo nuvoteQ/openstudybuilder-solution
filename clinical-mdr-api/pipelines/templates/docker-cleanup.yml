@@ -1,14 +1,7 @@
 steps:
 
   # Shut down Docker services and clean up local images
-  - script: |
-      set +e -x
-      
-      # Shut down all composed services 
-      docker compose down --volumes
-
-      # Remove all unused local volumes, which are not referenced by any containers.
-      docker volume prune -f
-
+  - script: >-
+      docker compose down --remove-orphans --rmi all --volumes
     condition: always() # this step will always run, even if the pipeline is canceled
     displayName: "Docker cleanup"
