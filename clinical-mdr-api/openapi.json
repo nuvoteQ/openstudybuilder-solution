@@ -3,7 +3,7 @@
   "info": {
     "title": "Clinical MDR API",
     "description": "\n## NOTICE\n\nThis license information is applicable to the swagger documentation of the clinical-mdr-api, that is the openapi.json.\n\n## License Terms (MIT)\n\nCopyright (C) 2022 Novo Nordisk A/S, Danish company registration no. 24256790\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n## Licenses and Acknowledgements for Incorporated Software\n\nThis component contains software licensed under different licenses when compiled, please refer to the third-party-licenses.md file for further information and full license texts.\n\n## Authentication\n\nSupports OAuth2 [Authorization Code Flow](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1),\nat paths described in the OpenID Connect Discovery metadata document (whose URL is defined by the `OAUTH_METADATA_URL` environment variable).\n\nMicrosoft Identity Platform documentation can be read \n([here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)).\n\nAuthentication can be turned off with `OAUTH_ENABLED=false` environment variable. \n\nWhen authentication is turned on, all requests to API endpoints must provide a valid bearer (JWT) token inside the `Authorization` http header. \n\nWhen authentication is turned off, all endpoints accept (optional) custom header `X-Test-User-Id` which \nallows any request to specify any user id value. If the `X-Test-User-Id` header is missing, the default value of `unknown-user` is assumed.\n\n## System information:\n\nSystem information is provided by a separate [System Information](../system/docs) sub-app which does not require authentication.\n",
-    "version": "3.0.179"
+    "version": "3.0.181"
   },
   "paths": {
     "/concepts/odms/study-events": {
@@ -81827,56 +81827,56 @@
             "description": "A list of activity names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Names",
+              "title": "Activity Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity names to use as a specific filter"
             },
-            "name": "activity_names",
+            "name": "activity_names[]",
             "in": "query"
           },
           {
             "description": "A list of activity sub group names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Subgroup Names",
+              "title": "Activity Subgroup Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity sub group names to use as a specific filter"
             },
-            "name": "activity_subgroup_names",
+            "name": "activity_subgroup_names[]",
             "in": "query"
           },
           {
             "description": "A list of activity group names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Group Names",
+              "title": "Activity Group Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity group names to use as a specific filter"
             },
-            "name": "activity_group_names",
+            "name": "activity_group_names[]",
             "in": "query"
           },
           {
             "description": "A list of activity instance names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Instance Names",
+              "title": "Activity Instance Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity instance names to use as a specific filter"
             },
-            "name": "activity_instance_names",
+            "name": "activity_instance_names[]",
             "in": "query"
           },
           {
@@ -82045,56 +82045,56 @@
             "description": "A list of activity names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Names",
+              "title": "Activity Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity names to use as a specific filter"
             },
-            "name": "activity_names",
+            "name": "activity_names[]",
             "in": "query"
           },
           {
             "description": "A list of activity sub group names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Subgroup Names",
+              "title": "Activity Subgroup Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity sub group names to use as a specific filter"
             },
-            "name": "activity_subgroup_names",
+            "name": "activity_subgroup_names[]",
             "in": "query"
           },
           {
             "description": "A list of activity group names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Group Names",
+              "title": "Activity Group Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity group names to use as a specific filter"
             },
-            "name": "activity_group_names",
+            "name": "activity_group_names[]",
             "in": "query"
           },
           {
             "description": "A list of activity instance names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Instance Names",
+              "title": "Activity Instance Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity instance names to use as a specific filter"
             },
-            "name": "activity_instance_names",
+            "name": "activity_instance_names[]",
             "in": "query"
           },
           {
@@ -83137,42 +83137,42 @@
             "description": "A list of activity names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Names",
+              "title": "Activity Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity names to use as a specific filter"
             },
-            "name": "activity_names",
+            "name": "activity_names[]",
             "in": "query"
           },
           {
             "description": "A list of activity sub group names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Subgroup Names",
+              "title": "Activity Subgroup Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity sub group names to use as a specific filter"
             },
-            "name": "activity_subgroup_names",
+            "name": "activity_subgroup_names[]",
             "in": "query"
           },
           {
             "description": "A list of activity group names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Group Names",
+              "title": "Activity Group Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity group names to use as a specific filter"
             },
-            "name": "activity_group_names",
+            "name": "activity_group_names[]",
             "in": "query"
           },
           {
@@ -83341,42 +83341,42 @@
             "description": "A list of activity names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Names",
+              "title": "Activity Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity names to use as a specific filter"
             },
-            "name": "activity_names",
+            "name": "activity_names[]",
             "in": "query"
           },
           {
             "description": "A list of activity sub group names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Subgroup Names",
+              "title": "Activity Subgroup Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity sub group names to use as a specific filter"
             },
-            "name": "activity_subgroup_names",
+            "name": "activity_subgroup_names[]",
             "in": "query"
           },
           {
             "description": "A list of activity group names to use as a specific filter",
             "required": false,
             "schema": {
-              "title": "Activity Group Names",
+              "title": "Activity Group Names[]",
               "type": "array",
               "items": {
                 "type": "string"
               },
               "description": "A list of activity group names to use as a specific filter"
             },
-            "name": "activity_group_names",
+            "name": "activity_group_names[]",
             "in": "query"
           },
           {
@@ -84247,6 +84247,345 @@
           },
           "404": {
             "description": "Not Found - there exist no selection of the activity for the study provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/studies/{uid}/study-activity-subgroups/{study_activity_subgroup_uid}": {
+      "patch": {
+        "tags": [
+          "Study Selections"
+        ],
+        "summary": "Edit a study activity subgroup protocol visibility flag",
+        "description": "State before:\n - Study must exist and be in status draft\nBusiness logic:\nState after:\n - Added new entry in the audit trail for the update of the study-activity-subgroup.",
+        "operationId": "patch_update_activity_subgroup_selection_studies__uid__study_activity_subgroups__study_activity_subgroup_uid__patch",
+        "parameters": [
+          {
+            "description": "The unique id of the study.",
+            "required": true,
+            "schema": {
+              "title": "Uid",
+              "type": "string",
+              "description": "The unique id of the study."
+            },
+            "name": "uid",
+            "in": "path"
+          },
+          {
+            "description": "The unique id of the study selection.",
+            "required": true,
+            "schema": {
+              "title": "Study Activity Subgroup Uid",
+              "type": "string",
+              "description": "The unique id of the study selection."
+            },
+            "name": "study_activity_subgroup_uid",
+            "in": "path"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Selection",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/StudyActivitySubGroupEditInput"
+                  }
+                ],
+                "description": "Related parameters of the selection that shall be updated."
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyActivitySubGroup"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - There exist no selection between the study-activity and study-activity-subgroup.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/studies/{uid}/study-activity-groups/{study_activity_group_uid}": {
+      "patch": {
+        "tags": [
+          "Study Selections"
+        ],
+        "summary": "Edit a study activity group protocol visibility flag",
+        "description": "State before:\n - Study must exist and be in status draft\nBusiness logic:\nState after:\n - Added new entry in the audit trail for the update of the study-activity-group.",
+        "operationId": "patch_update_activity_group_selection_studies__uid__study_activity_groups__study_activity_group_uid__patch",
+        "parameters": [
+          {
+            "description": "The unique id of the study.",
+            "required": true,
+            "schema": {
+              "title": "Uid",
+              "type": "string",
+              "description": "The unique id of the study."
+            },
+            "name": "uid",
+            "in": "path"
+          },
+          {
+            "description": "The unique id of the study selection.",
+            "required": true,
+            "schema": {
+              "title": "Study Activity Group Uid",
+              "type": "string",
+              "description": "The unique id of the study selection."
+            },
+            "name": "study_activity_group_uid",
+            "in": "path"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Selection",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/StudyActivityGroupEditInput"
+                  }
+                ],
+                "description": "Related parameters of the selection that shall be updated."
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyActivityGroup"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - There exist no selection between the study-activity and study-activity-group.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/studies/{uid}/study-soa-groups/{study_soa_group_uid}": {
+      "patch": {
+        "tags": [
+          "Study Selections"
+        ],
+        "summary": "Edit a study soa group protocol visibility flag",
+        "description": "State before:\n - Study must exist and be in status draft\nBusiness logic:\nState after:\n - Added new entry in the audit trail for the update of the study-soa-group.",
+        "operationId": "patch_update_soa_group_selection_studies__uid__study_soa_groups__study_soa_group_uid__patch",
+        "parameters": [
+          {
+            "description": "The unique id of the study.",
+            "required": true,
+            "schema": {
+              "title": "Uid",
+              "type": "string",
+              "description": "The unique id of the study."
+            },
+            "name": "uid",
+            "in": "path"
+          },
+          {
+            "description": "The unique id of the study selection.",
+            "required": true,
+            "schema": {
+              "title": "Study Soa Group Uid",
+              "type": "string",
+              "description": "The unique id of the study selection."
+            },
+            "name": "study_soa_group_uid",
+            "in": "path"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Selection",
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/StudySoAGroupEditInput"
+                  }
+                ],
+                "description": "Related parameters of the selection that shall be updated."
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudySoAGroup"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - There exist no selection between the study-activity and study-soa-group.",
             "content": {
               "application/json": {
                 "schema": {
@@ -133388,6 +133727,41 @@
           }
         }
       },
+      "StudyActivityGroup": {
+        "title": "StudyActivityGroup",
+        "required": [
+          "study_uid",
+          "study_activity_group_uid"
+        ],
+        "type": "object",
+        "properties": {
+          "show_activity_group_in_protocol_flowchart": {
+            "title": "show_activity_group_in_protocol_flowchart",
+            "type": "boolean",
+            "description": "show activity group in protocol flow chart"
+          },
+          "study_uid": {
+            "title": "study_uid",
+            "type": "string",
+            "description": "The uid of the study"
+          },
+          "study_activity_group_uid": {
+            "title": "study_activity_group_uid",
+            "type": "string"
+          }
+        }
+      },
+      "StudyActivityGroupEditInput": {
+        "title": "StudyActivityGroupEditInput",
+        "type": "object",
+        "properties": {
+          "show_activity_group_in_protocol_flowchart": {
+            "title": "show_activity_group_in_protocol_flowchart",
+            "type": "boolean",
+            "description": "show activity group in protocol flow chart"
+          }
+        }
+      },
       "StudyActivityInstanceState": {
         "title": "StudyActivityInstanceState",
         "enum": [
@@ -133743,6 +134117,41 @@
             "description": "Date of last modification",
             "format": "date-time",
             "nullable": true
+          }
+        }
+      },
+      "StudyActivitySubGroup": {
+        "title": "StudyActivitySubGroup",
+        "required": [
+          "study_uid",
+          "study_activity_subgroup_uid"
+        ],
+        "type": "object",
+        "properties": {
+          "show_activity_subgroup_in_protocol_flowchart": {
+            "title": "show_activity_subgroup_in_protocol_flowchart",
+            "type": "boolean",
+            "description": "show activity subgroup in protocol flow chart"
+          },
+          "study_uid": {
+            "title": "study_uid",
+            "type": "string",
+            "description": "The uid of the study"
+          },
+          "study_activity_subgroup_uid": {
+            "title": "study_activity_subgroup_uid",
+            "type": "string"
+          }
+        }
+      },
+      "StudyActivitySubGroupEditInput": {
+        "title": "StudyActivitySubGroupEditInput",
+        "type": "object",
+        "properties": {
+          "show_activity_subgroup_in_protocol_flowchart": {
+            "title": "show_activity_subgroup_in_protocol_flowchart",
+            "type": "boolean",
+            "description": "show activity subgroup in protocol flow chart"
           }
         }
       },
@@ -141286,6 +141695,43 @@
           "changes": {
             "title": "Changes",
             "type": "object"
+          }
+        }
+      },
+      "StudySoAGroup": {
+        "title": "StudySoAGroup",
+        "required": [
+          "study_uid",
+          "study_soa_group_uid"
+        ],
+        "type": "object",
+        "properties": {
+          "show_soa_group_in_protocol_flowchart": {
+            "title": "show_soa_group_in_protocol_flowchart",
+            "type": "boolean",
+            "description": "show soa group in protocol flow chart",
+            "default": false
+          },
+          "study_uid": {
+            "title": "study_uid",
+            "type": "string",
+            "description": "The uid of the study"
+          },
+          "study_soa_group_uid": {
+            "title": "study_soa_group_uid",
+            "type": "string"
+          }
+        }
+      },
+      "StudySoAGroupEditInput": {
+        "title": "StudySoAGroupEditInput",
+        "type": "object",
+        "properties": {
+          "show_soa_group_in_protocol_flowchart": {
+            "title": "show_soa_group_in_protocol_flowchart",
+            "type": "boolean",
+            "description": "show soa group in protocol flow chart",
+            "default": false
           }
         }
       },
