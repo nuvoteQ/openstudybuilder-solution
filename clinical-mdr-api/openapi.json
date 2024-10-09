@@ -3,9 +3,417 @@
   "info": {
     "title": "Clinical MDR API",
     "description": "\n## NOTICE\n\nThis license information is applicable to the swagger documentation of the clinical-mdr-api, that is the openapi.json.\n\n## License Terms (MIT)\n\nCopyright (C) 2022 Novo Nordisk A/S, Danish company registration no. 24256790\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n## Licenses and Acknowledgements for Incorporated Software\n\nThis component contains software licensed under different licenses when compiled, please refer to the third-party-licenses.md file for further information and full license texts.\n\n## Authentication\n\nSupports OAuth2 [Authorization Code Flow](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1),\nat paths described in the OpenID Connect Discovery metadata document (whose URL is defined by the `OAUTH_METADATA_URL` environment variable).\n\nMicrosoft Identity Platform documentation can be read \n([here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)).\n\nAuthentication can be turned off with `OAUTH_ENABLED=false` environment variable. \n\nWhen authentication is turned on, all requests to API endpoints must provide a valid bearer (JWT) token inside the `Authorization` http header. \n\nWhen authentication is turned off, all endpoints accept (optional) custom header `X-Test-User-Id` which \nallows any request to specify any user id value. If the `X-Test-User-Id` header is missing, the default value of `unknown-user` is assumed.\n\n## System information:\n\nSystem information is provided by a separate [System Information](../system/docs) sub-app which does not require authentication.\n",
-    "version": "3.0.198"
+    "version": "3.0.210"
   },
   "paths": {
+    "/notifications": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Returns all notifications.",
+        "operationId": "get_all_notifications_notifications_get",
+        "parameters": [
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Get All Notifications Notifications Get",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Notification"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Creates a notification.",
+        "operationId": "create_notification_notifications_post",
+        "parameters": [
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/{sn}": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Returns the notification identified by the provided Serial Number.",
+        "operationId": "get_notification_notifications__sn__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Serial Number of the notification",
+              "type": "integer"
+            },
+            "name": "sn",
+            "in": "path"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Deletes the notification identified by the provided Serial Number.",
+        "operationId": "delete_notification_notifications__sn__delete",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Serial Number of the notification",
+              "type": "integer"
+            },
+            "name": "sn",
+            "in": "path"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Updates the notification identified by the provided Serial Number.",
+        "operationId": "update_notification_notifications__sn__patch",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Serial Number of the notification",
+              "type": "integer"
+            },
+            "name": "sn",
+            "in": "path"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotificationInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/concepts/odms/study-events": {
       "get": {
         "tags": [
@@ -40420,12 +40828,12 @@
             "in": "path"
           },
           {
-            "description": "if specified only valida parameters for a given study will be returned.",
+            "description": "if specified only valid parameters for a given study will be returned.",
             "required": false,
             "schema": {
               "title": "Study Uid",
               "type": "string",
-              "description": "if specified only valida parameters for a given study will be returned."
+              "description": "if specified only valid parameters for a given study will be returned."
             },
             "name": "study_uid",
             "in": "query"
@@ -45892,12 +46300,12 @@
             "in": "query"
           },
           {
-            "description": "The type of the parent relationship.\nValid types are 'type' or 'subtype', 'valid_for_epoch'",
+            "description": "The type of the parent relationship.\nValid types are 'type' or 'subtype'",
             "required": true,
             "schema": {
               "title": "Relationship Type",
               "type": "string",
-              "description": "The type of the parent relationship.\nValid types are 'type' or 'subtype', 'valid_for_epoch'"
+              "description": "The type of the parent relationship.\nValid types are 'type' or 'subtype'"
             },
             "name": "relationship_type",
             "in": "query"
@@ -55151,7 +55559,7 @@
           "Compounds"
         ],
         "summary": "Creates new compound.",
-        "description": "State before:\n - The specified library allows creation of concepts (the 'is_editable' property of the library needs to be true).\n - The specified CT term uids must exist, and the term names are in a final state.\n\nBusiness logic:\n - New node is created for the compound with the set properties.\n - relationships to specified control terminology are created (as in the model).\n - relationships to specified activity parent are created (as in the model)\n - The status of the new created version will be automatically set to 'Draft'.\n - The 'version' property of the new version will be automatically set to 0.1.\n - The 'change_description' property will be set automatically to 'Initial version'.\n\nState after:\n - compounds is created in status Draft and assigned an initial minor version number as 0.1.\n - Audit trail entry must be made with action of creating new Draft version.\n\nPossible errors:\n - Invalid library or control terminology uid's specified.",
+        "description": "State before:\n - The specified library allows creation of concepts (the 'is_editable' property of the library needs to be true).\n - The specified CT term uids must exist, and the term names are in a final state.\n\nBusiness logic:\n - New node is created for the compound with the set properties.\n - relationships to specified control terminology are created (as in the model).\n - The status of the new created version will be automatically set to 'Draft'.\n - The 'version' property of the new version will be automatically set to 0.1.\n - The 'change_description' property will be set automatically to 'Initial version'.\n\nState after:\n - compounds is created in status Draft and assigned an initial minor version number as 0.1.\n - Audit trail entry must be made with action of creating new Draft version.\n\nPossible errors:\n - Invalid library or control terminology uid's specified.",
         "operationId": "create_concepts_compounds_post",
         "parameters": [
           {
@@ -55213,6 +55621,156 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/concepts/compounds/versions": {
+      "get": {
+        "tags": [
+          "Compounds"
+        ],
+        "summary": "List all versions of compounds",
+        "description": "State before:\n - The library must exist (if specified)\n\nBusiness logic:\n - List version history of compounds\n - The returned versions are ordered by version start_date descending (newest entries first).\n\nState after:\n - No change\n\nPossible errors:\n - Invalid library name specified.\n\n\n\nResponse format:\n\n- In addition to retrieving data in JSON format (default behaviour), \nit is possible to request data to be returned in CSV, XML or Excel formats \nby sending the `Accept` http request header with one of the following values:\n  - `text/csv`\n\n  - `text/xml`\n\n  - `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`",
+        "operationId": "get_compounds_versions_concepts_compounds_versions_get",
+        "parameters": [
+          {
+            "description": "The library name",
+            "required": false,
+            "schema": {
+              "title": "Library",
+              "type": "string",
+              "description": "The library name"
+            },
+            "name": "library",
+            "in": "query"
+          },
+          {
+            "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+            "required": false,
+            "schema": {
+              "title": "Page Number",
+              "minimum": 1.0,
+              "type": "integer",
+              "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+              "default": 1
+            },
+            "name": "page_number",
+            "in": "query"
+          },
+          {
+            "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+            "required": false,
+            "schema": {
+              "title": "Page Size",
+              "maximum": 1000.0,
+              "minimum": 0.0,
+              "type": "integer",
+              "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+              "default": 10
+            },
+            "name": "page_size",
+            "in": "query"
+          },
+          {
+            "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+            "required": false,
+            "schema": {
+              "title": "Filters",
+              "type": "string",
+              "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+              "format": "json-string"
+            },
+            "example": "{\"*\":{ \"v\": [\"\"], \"op\": \"co\"}}",
+            "name": "filters",
+            "in": "query"
+          },
+          {
+            "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n",
+            "required": false,
+            "schema": {
+              "title": "Operator",
+              "type": "string",
+              "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n",
+              "default": "and"
+            },
+            "name": "operator",
+            "in": "query"
+          },
+          {
+            "description": "Boolean value specifying whether total count of entities should be included in the reponse.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+            "required": false,
+            "schema": {
+              "title": "Total Count",
+              "type": "boolean",
+              "description": "Boolean value specifying whether total count of entities should be included in the reponse.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+              "default": false
+            },
+            "name": "total_count",
+            "in": "query"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomPage_Compound_"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -55537,7 +56095,7 @@
         ],
         "summary": "Get details on a specific compounds (in a specific version)",
         "description": "State before:\n - a compound with uid must exist.\n\nBusiness logic:\n - If parameter at_specified_date_time is specified then the latest/newest representation of the concept at this point in time is returned. The point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\ufffd0 is assumed.\n - If parameter status is specified then the representation of the concept in that status is returned (if existent). This is useful if the concept has a status 'Draft' and a status 'Final'.\n - If parameter version is specified then the latest/newest representation of the concept in that version is returned. Only exact matches are considered. The version is specified in the following format: <major>.<minor> where <major> and <minor> are digits. E.g. '0.1', '0.2', '1.0', ...\n\nState after:\n - No change\n\nPossible errors:\n - Invalid uid, at_specified_date_time, status or version.",
-        "operationId": "get_activity_concepts_compounds__uid__get",
+        "operationId": "get_compound_concepts_compounds__uid__get",
         "parameters": [
           {
             "description": "The unique id of the compound",
@@ -56445,6 +57003,156 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/concepts/active-substances/versions": {
+      "get": {
+        "tags": [
+          "Active Substances"
+        ],
+        "summary": "List all versions of active substances",
+        "description": "State before:\n - The library must exist (if specified)\n\nBusiness logic:\n - List version history of active substances.\n - The returned versions are ordered by version start_date descending (newest entries first).\n\nState after:\n - No change\n\nPossible errors:\n - Invalid library name specified.\n\n\n\nResponse format:\n\n- In addition to retrieving data in JSON format (default behaviour), \nit is possible to request data to be returned in CSV, XML or Excel formats \nby sending the `Accept` http request header with one of the following values:\n  - `text/csv`\n\n  - `text/xml`\n\n  - `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`",
+        "operationId": "get_active_substances_versions_concepts_active_substances_versions_get",
+        "parameters": [
+          {
+            "description": "The library name",
+            "required": false,
+            "schema": {
+              "title": "Library",
+              "type": "string",
+              "description": "The library name"
+            },
+            "name": "library",
+            "in": "query"
+          },
+          {
+            "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+            "required": false,
+            "schema": {
+              "title": "Page Number",
+              "minimum": 1.0,
+              "type": "integer",
+              "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+              "default": 1
+            },
+            "name": "page_number",
+            "in": "query"
+          },
+          {
+            "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+            "required": false,
+            "schema": {
+              "title": "Page Size",
+              "maximum": 1000.0,
+              "minimum": 0.0,
+              "type": "integer",
+              "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+              "default": 10
+            },
+            "name": "page_size",
+            "in": "query"
+          },
+          {
+            "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+            "required": false,
+            "schema": {
+              "title": "Filters",
+              "type": "string",
+              "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+              "format": "json-string"
+            },
+            "example": "{\"*\":{ \"v\": [\"\"], \"op\": \"co\"}}",
+            "name": "filters",
+            "in": "query"
+          },
+          {
+            "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n",
+            "required": false,
+            "schema": {
+              "title": "Operator",
+              "type": "string",
+              "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n",
+              "default": "and"
+            },
+            "name": "operator",
+            "in": "query"
+          },
+          {
+            "description": "Boolean value specifying whether total count of entities should be included in the reponse.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+            "required": false,
+            "schema": {
+              "title": "Total Count",
+              "type": "boolean",
+              "description": "Boolean value specifying whether total count of entities should be included in the reponse.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+              "default": false
+            },
+            "name": "total_count",
+            "in": "query"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomPage_ActiveSubstance_"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -57522,6 +58230,156 @@
         }
       }
     },
+    "/concepts/pharmaceutical-products/versions": {
+      "get": {
+        "tags": [
+          "Pharmaceutical Products"
+        ],
+        "summary": "List all versions of pharmaceutical products",
+        "description": "State before:\n - The library must exist (if specified)\n\nBusiness logic:\n - List version history of pharmaceutical products\n - The returned versions are ordered by version start_date descending (newest entries first).\n\nState after:\n - No change\n\nPossible errors:\n - Invalid library name specified.\n\n\n\nResponse format:\n\n- In addition to retrieving data in JSON format (default behaviour), \nit is possible to request data to be returned in CSV, XML or Excel formats \nby sending the `Accept` http request header with one of the following values:\n  - `text/csv`\n\n  - `text/xml`\n\n  - `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`",
+        "operationId": "get_pharmaceutical_products_versions_concepts_pharmaceutical_products_versions_get",
+        "parameters": [
+          {
+            "description": "The library name",
+            "required": false,
+            "schema": {
+              "title": "Library",
+              "type": "string",
+              "description": "The library name"
+            },
+            "name": "library",
+            "in": "query"
+          },
+          {
+            "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+            "required": false,
+            "schema": {
+              "title": "Page Number",
+              "minimum": 1.0,
+              "type": "integer",
+              "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+              "default": 1
+            },
+            "name": "page_number",
+            "in": "query"
+          },
+          {
+            "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+            "required": false,
+            "schema": {
+              "title": "Page Size",
+              "maximum": 1000.0,
+              "minimum": 0.0,
+              "type": "integer",
+              "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+              "default": 10
+            },
+            "name": "page_size",
+            "in": "query"
+          },
+          {
+            "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+            "required": false,
+            "schema": {
+              "title": "Filters",
+              "type": "string",
+              "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+              "format": "json-string"
+            },
+            "example": "{\"*\":{ \"v\": [\"\"], \"op\": \"co\"}}",
+            "name": "filters",
+            "in": "query"
+          },
+          {
+            "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n",
+            "required": false,
+            "schema": {
+              "title": "Operator",
+              "type": "string",
+              "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n",
+              "default": "and"
+            },
+            "name": "operator",
+            "in": "query"
+          },
+          {
+            "description": "Boolean value specifying whether total count of entities should be included in the reponse.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+            "required": false,
+            "schema": {
+              "title": "Total Count",
+              "type": "boolean",
+              "description": "Boolean value specifying whether total count of entities should be included in the reponse.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+              "default": false
+            },
+            "name": "total_count",
+            "in": "query"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomPage_PharmaceuticalProduct_"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/concepts/pharmaceutical-products/headers": {
       "get": {
         "tags": [
@@ -58585,6 +59443,156 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/concepts/medicinal-products/versions": {
+      "get": {
+        "tags": [
+          "Medicinal Products"
+        ],
+        "summary": "List all versions of medicinal products",
+        "description": "State before:\n - The library must exist (if specified)\n\nBusiness logic:\n - List version history of medicinal products\n - The returned versions are ordered by version start_date descending (newest entries first).\n\nState after:\n - No change\n\nPossible errors:\n - Invalid library name specified.\n\n\n\nResponse format:\n\n- In addition to retrieving data in JSON format (default behaviour), \nit is possible to request data to be returned in CSV, XML or Excel formats \nby sending the `Accept` http request header with one of the following values:\n  - `text/csv`\n\n  - `text/xml`\n\n  - `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`",
+        "operationId": "get_medicinal_products_versions_concepts_medicinal_products_versions_get",
+        "parameters": [
+          {
+            "description": "The library name",
+            "required": false,
+            "schema": {
+              "title": "Library",
+              "type": "string",
+              "description": "The library name"
+            },
+            "name": "library",
+            "in": "query"
+          },
+          {
+            "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+            "required": false,
+            "schema": {
+              "title": "Page Number",
+              "minimum": 1.0,
+              "type": "integer",
+              "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+              "default": 1
+            },
+            "name": "page_number",
+            "in": "query"
+          },
+          {
+            "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+            "required": false,
+            "schema": {
+              "title": "Page Size",
+              "maximum": 1000.0,
+              "minimum": 0.0,
+              "type": "integer",
+              "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+              "default": 10
+            },
+            "name": "page_size",
+            "in": "query"
+          },
+          {
+            "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+            "required": false,
+            "schema": {
+              "title": "Filters",
+              "type": "string",
+              "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+              "format": "json-string"
+            },
+            "example": "{\"*\":{ \"v\": [\"\"], \"op\": \"co\"}}",
+            "name": "filters",
+            "in": "query"
+          },
+          {
+            "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n",
+            "required": false,
+            "schema": {
+              "title": "Operator",
+              "type": "string",
+              "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n",
+              "default": "and"
+            },
+            "name": "operator",
+            "in": "query"
+          },
+          {
+            "description": "Boolean value specifying whether total count of entities should be included in the reponse.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+            "required": false,
+            "schema": {
+              "title": "Total Count",
+              "type": "boolean",
+              "description": "Boolean value specifying whether total count of entities should be included in the reponse.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+              "default": false
+            },
+            "name": "total_count",
+            "in": "query"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomPage_MedicinalProduct_"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -59662,6 +60670,156 @@
         }
       }
     },
+    "/concepts/compound-aliases/versions": {
+      "get": {
+        "tags": [
+          "Compound Aliases"
+        ],
+        "summary": "List all versions of compound aliases",
+        "description": "State before:\n - The library must exist (if specified)\n\nBusiness logic:\n - List version history of compound aliases.\n - The returned versions are ordered by version start_date descending (newest entries first).\n\nState after:\n - No change\n\nPossible errors:\n - Invalid library name specified.\n\n\n\nResponse format:\n\n- In addition to retrieving data in JSON format (default behaviour), \nit is possible to request data to be returned in CSV, XML or Excel formats \nby sending the `Accept` http request header with one of the following values:\n  - `text/csv`\n\n  - `text/xml`\n\n  - `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`",
+        "operationId": "get_compounds_versions_concepts_compound_aliases_versions_get",
+        "parameters": [
+          {
+            "description": "The library name",
+            "required": false,
+            "schema": {
+              "title": "Library",
+              "type": "string",
+              "description": "The library name"
+            },
+            "name": "library",
+            "in": "query"
+          },
+          {
+            "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+            "required": false,
+            "schema": {
+              "title": "Page Number",
+              "minimum": 1.0,
+              "type": "integer",
+              "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+              "default": 1
+            },
+            "name": "page_number",
+            "in": "query"
+          },
+          {
+            "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+            "required": false,
+            "schema": {
+              "title": "Page Size",
+              "maximum": 1000.0,
+              "minimum": 0.0,
+              "type": "integer",
+              "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+              "default": 10
+            },
+            "name": "page_size",
+            "in": "query"
+          },
+          {
+            "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+            "required": false,
+            "schema": {
+              "title": "Filters",
+              "type": "string",
+              "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+              "format": "json-string"
+            },
+            "example": "{\"*\":{ \"v\": [\"\"], \"op\": \"co\"}}",
+            "name": "filters",
+            "in": "query"
+          },
+          {
+            "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n",
+            "required": false,
+            "schema": {
+              "title": "Operator",
+              "type": "string",
+              "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n",
+              "default": "and"
+            },
+            "name": "operator",
+            "in": "query"
+          },
+          {
+            "description": "Boolean value specifying whether total count of entities should be included in the reponse.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+            "required": false,
+            "schema": {
+              "title": "Total Count",
+              "type": "boolean",
+              "description": "Boolean value specifying whether total count of entities should be included in the reponse.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+              "default": false
+            },
+            "name": "total_count",
+            "in": "query"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomPage_CompoundAlias_"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/concepts/compound-aliases/headers": {
       "get": {
         "tags": [
@@ -59816,7 +60974,7 @@
           "Compound Aliases"
         ],
         "summary": "Get details on a specific compound aliases (in a specific version)",
-        "description": "State before:\n - a compound alias with uid must exist.\n\nBusiness logic:\n - If parameter at_specified_date_time is specified then the latest/newest representation of the concept at this point in time is returned. The point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is ommitted, UTC\ufffd0 is assumed.\n - If parameter status is specified then the representation of the concept in that status is returned (if existent). This is useful if the concept has a status 'Draft' and a status 'Final'.\n - If parameter version is specified then the latest/newest representation of the concept in that version is returned. Only exact matches are considered. The version is specified in the following format: <major>.<minor> where <major> and <minor> are digits. E.g. '0.1', '0.2', '1.0', ...\n\nState after:\n - No change\n\nPossible errors:\n - Invalid uid, at_specified_date_time, status or version.",
+        "description": "State before:\n - a compound alias with uid must exist.\n\nBusiness logic:\n - If parameter at_specified_date_time is specified then the latest/newest representation of the concept at this point in time is returned. The point in time needs to be specified in ISO 8601 format including the timezone, e.g.: '2020-10-31T16:00:00+02:00' for October 31, 2020 at 4pm in UTC+2 timezone. If the timezone is omitted, UTC\ufffd0 is assumed.\n - If parameter status is specified then the representation of the concept in that status is returned (if existent). This is useful if the concept has a status 'Draft' and a status 'Final'.\n - If parameter version is specified then the latest/newest representation of the concept in that version is returned. Only exact matches are considered. The version is specified in the following format: <major>.<minor> where <major> and <minor> are digits. E.g. '0.1', '0.2', '1.0', ...\n\nState after:\n - No change\n\nPossible errors:\n - Invalid uid, at_specified_date_time, status or version.",
         "operationId": "get_concepts_compound_aliases__uid__get",
         "parameters": [
           {
@@ -60526,6 +61684,17 @@
               "description": "The unique id of the activity sub group to use as a specific filter"
             },
             "name": "activity_subgroup_uid",
+            "in": "query"
+          },
+          {
+            "description": "The unique id of the activity group to use as a specific filter",
+            "required": false,
+            "schema": {
+              "title": "Activity Group Uid",
+              "type": "string",
+              "description": "The unique id of the activity group to use as a specific filter"
+            },
+            "name": "activity_group_uid",
             "in": "query"
           },
           {
@@ -71045,13 +72214,13 @@
         "operationId": "get_comment_topics_comment_topics_get",
         "parameters": [
           {
-            "description": "If specified, only topic matching the sepcified value are returned.",
+            "description": "If specified, only topic matching the specified value are returned.",
             "required": false,
             "schema": {
               "title": "Topic Path",
               "minLength": 1,
               "type": "string",
-              "description": "If specified, only topic matching the sepcified value are returned."
+              "description": "If specified, only topic matching the specified value are returned."
             },
             "name": "topic_path",
             "in": "query"
@@ -73161,6 +74330,199 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/studies/{uid}/pharma-cm": {
+      "get": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Returns the pharma-cm represention of study identified by 'uid'.",
+        "operationId": "get_pharma_cm_representation_studies__uid__pharma_cm_get",
+        "parameters": [
+          {
+            "description": "The unique id of the study.",
+            "required": true,
+            "schema": {
+              "title": "Uid",
+              "type": "string",
+              "description": "The unique id of the study."
+            },
+            "name": "uid",
+            "in": "path"
+          },
+          {
+            "description": "If specified, study data with specified version is returned.\n\n    Only exact matches are considered. \n\n    E.g. 1, 2, 2.1, ...",
+            "required": false,
+            "schema": {
+              "title": "Study Value Version",
+              "pattern": "^[0-9]+\\.?[0-9]*$",
+              "type": "string",
+              "description": "If specified, study data with specified version is returned.\n\n    Only exact matches are considered. \n\n    E.g. 1, 2, 2.1, ..."
+            },
+            "name": "study_value_version",
+            "in": "query"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudyPharmaCM"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - The study with the specified 'uid' (and the specified date/time and/or status) wasn't found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/studies/{uid}/pharma-cm.xml": {
+      "get": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Returns the pharma-cm represention of study identified by 'uid' in the xml format.",
+        "operationId": "get_pharma_cm_xml_representation_studies__uid__pharma_cm_xml_get",
+        "parameters": [
+          {
+            "description": "The unique id of the study.",
+            "required": true,
+            "schema": {
+              "title": "Uid",
+              "type": "string",
+              "description": "The unique id of the study."
+            },
+            "name": "uid",
+            "in": "path"
+          },
+          {
+            "description": "If specified, study data with specified version is returned.\n\n    Only exact matches are considered. \n\n    E.g. 1, 2, 2.1, ...",
+            "required": false,
+            "schema": {
+              "title": "Study Value Version",
+              "pattern": "^[0-9]+\\.?[0-9]*$",
+              "type": "string",
+              "description": "If specified, study data with specified version is returned.\n\n    Only exact matches are considered. \n\n    E.g. 1, 2, 2.1, ..."
+            },
+            "name": "study_value_version",
+            "in": "query"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "title": "X-Test-User-Id",
+              "type": "string",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "text/xml": {}
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -93165,8 +94527,8 @@
         "tags": [
           "Study Selections"
         ],
-        "summary": "List all study desing-cells currently selected for study with provided uid that are connected to an StudyArm with arm_uid",
-        "description": "State before:\n    - Study must exist.\n     \n    Business logic:\n     - By default (no study status is provided) list all study desing-cells for the study uid in status draft. If the study not exist in status draft then return the study desing-cells for the study in status released. If the study uid only exist as deleted then this is returned.\n     - If a specific study status parameter is provided then return study desing-cell for this study status.\n    - If the locked study status parameter is requested then a study version should also be provided, and then the study desing-cells for the specific locked study version is returned.\n    - Indicate by a boolean variable if the study desing-cell can be updated (if the selected study is in status draft).  \n    - Indicate by a boolean variable if all expected selections have been made for each study desing-cells, or some are missing.\n\n\n    State after:\n    - no change.\n     \n    Possible errors:\n    - Invalid study-uid.",
+        "summary": "List all study design-cells currently selected for study with provided uid that are connected to an StudyArm with arm_uid",
+        "description": "State before:\n    - Study must exist.\n     \n    Business logic:\n     - By default (no study status is provided) list all study design-cells for the study uid in status draft. If the study not exist in status draft then return the study design-cells for the study in status released. If the study uid only exist as deleted then this is returned.\n     - If a specific study status parameter is provided then return study design-cell for this study status.\n    - If the locked study status parameter is requested then a study version should also be provided, and then the study design-cells for the specific locked study version is returned.\n    - Indicate by a boolean variable if the study design-cell can be updated (if the selected study is in status draft).  \n    - Indicate by a boolean variable if all expected selections have been made for each study design-cells, or some are missing.\n\n\n    State after:\n    - no change.\n     \n    Possible errors:\n    - Invalid study-uid.",
         "operationId": "get_all_selected_desing_cells_connected_arm_studies__uid__study_design_cells_arm__arm_uid__get",
         "parameters": [
           {
@@ -93274,8 +94636,8 @@
         "tags": [
           "Study Selections"
         ],
-        "summary": "List all study desing-cells currently selected for study with provided\n    uid that are connected to an StudyBranchArm with branch_arm_uid",
-        "description": "State before:\n    - Study must exist.\n     \n    Business logic:\n     - By default (no study status is provided) list all study desing-cells for the\n     study uid in status draft. If the study not exist in status draft then return\n     the study desing-cells for the study in status released. If the study uid only exist as deleted then this is returned.\n     - If a specific study status parameter is provided then return study desing-cell for this study status.\n    - If the locked study status parameter is requested then a study version should\n    also be provided, and then the study desing-cells for the specific locked study version is returned.\n    - Indicate by a boolean variable if the study desing-cell can be updated (if the selected study is in status draft).  \n    - Indicate by a boolean variable if all expected selections have been made for each study desing-cells, or some are missing.\n\n\n    State after:\n    - no change.\n     \n    Possible errors:\n    - Invalid study-uid.",
+        "summary": "List all study design-cells currently selected for study with provided\n    uid that are connected to an StudyBranchArm with branch_arm_uid",
+        "description": "State before:\n    - Study must exist.\n     \n    Business logic:\n     - By default (no study status is provided) list all study design-cells for the\n     study uid in status draft. If the study not exist in status draft then return\n     the study design-cells for the study in status released. If the study uid only exist as deleted then this is returned.\n     - If a specific study status parameter is provided then return study design-cell for this study status.\n    - If the locked study status parameter is requested then a study version should\n    also be provided, and then the study design-cells for the specific locked study version is returned.\n    - Indicate by a boolean variable if the study design-cell can be updated (if the selected study is in status draft).  \n    - Indicate by a boolean variable if all expected selections have been made for each study design-cells, or some are missing.\n\n\n    State after:\n    - no change.\n     \n    Possible errors:\n    - Invalid study-uid.",
         "operationId": "get_all_selected_desing_cells_connected_branch_arm_studies__uid__study_design_cells_branch_arm__branch_arm_uid__get",
         "parameters": [
           {
@@ -93383,8 +94745,8 @@
         "tags": [
           "Study Selections"
         ],
-        "summary": "List all study desing-cells currently selected for study with provided uid that are connected to an StudyEpoch with epoch_uid",
-        "description": "State before:\n    - Study must exist.\n     \n    Business logic:\n     - By default (no study status is provided) list all study desing-cells for the study uid in status draft. If the study not exist in status draft then return the study desing-cells for the study in status released. If the study uid only exist as deleted then this is returned.\n     - If a specific study status parameter is provided then return study desing-cell for this study status.\n    - If the locked study status parameter is requested then a study version should also be provided, and then the study desing-cells for the specific locked study version is returned.\n    - Indicate by a boolean variable if the study desing-cell can be updated (if the selected study is in status draft).  \n    - Indicate by a boolean variable if all expected selections have been made for each study desing-cells, or some are missing.\n\n\n    State after:\n    - no change.\n     \n    Possible errors:\n    - Invalid study-uid.",
+        "summary": "List all study design-cells currently selected for study with provided uid that are connected to an StudyEpoch with epoch_uid",
+        "description": "State before:\n    - Study must exist.\n     \n    Business logic:\n     - By default (no study status is provided) list all study design-cells for the study uid in status draft. If the study not exist in status draft then return the study design-cells for the study in status released. If the study uid only exist as deleted then this is returned.\n     - If a specific study status parameter is provided then return study design-cell for this study status.\n    - If the locked study status parameter is requested then a study version should also be provided, and then the study design-cells for the specific locked study version is returned.\n    - Indicate by a boolean variable if the study design-cell can be updated (if the selected study is in status draft).  \n    - Indicate by a boolean variable if all expected selections have been made for each study design-cells, or some are missing.\n\n\n    State after:\n    - no change.\n     \n    Possible errors:\n    - Invalid study-uid.",
         "operationId": "get_all_selected_desing_cells_connected_epoch_studies__uid__study_design_cells_study_epochs__epoch_uid__get",
         "parameters": [
           {
@@ -98756,106 +100118,6 @@
           },
           "404": {
             "description": "Not Found - Study is not found with the passed 'uid'.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/studies/{uid}/study-visits/allowed-visit-types": {
-      "get": {
-        "tags": [
-          "Study Selections"
-        ],
-        "summary": "Returns all allowed Visit Types for specified epoch type",
-        "operationId": "get_allowed_visit_types_for_epoch_type_studies__uid__study_visits_allowed_visit_types_get",
-        "parameters": [
-          {
-            "description": "The unique uid of the study",
-            "required": true,
-            "schema": {
-              "title": "Uid",
-              "type": "string",
-              "description": "The unique uid of the study"
-            },
-            "name": "uid",
-            "in": "path"
-          },
-          {
-            "description": "The unique uid of the epoch type for which the allowed visit types should be returned",
-            "required": true,
-            "schema": {
-              "title": "Epoch Type Uid",
-              "type": "string",
-              "description": "The unique uid of the epoch type for which the allowed visit types should be returned"
-            },
-            "name": "epoch_type_uid",
-            "in": "query"
-          },
-          {
-            "description": "A value to be injected into User object as user id.",
-            "required": false,
-            "schema": {
-              "title": "X-Test-User-Id",
-              "type": "string",
-              "description": "A value to be injected into User object as user id."
-            },
-            "name": "x-test-user-id",
-            "in": "header"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "title": "Response Get Allowed Visit Types For Epoch Type Studies  Uid  Study Visits Allowed Visit Types Get",
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AllowedVisitTypesForEpochType"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Entity not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -106715,7 +107977,7 @@
         ],
         "summary": "List all sponsor model dataset classes",
         "description": "State before:\n\nBusiness logic:\n - List all sponsor model dataset classes in their latest version.\n\nState after:\n - No change\n\nPossible errors:",
-        "operationId": "get_sponsor_model_dataset_classs_standards_sponsor_models_dataset_classes_get",
+        "operationId": "get_sponsor_model_dataset_class_standards_sponsor_models_dataset_classes_get",
         "parameters": [
           {
             "description": "\nJSON dictionary of field names and boolean flags specifying the sort order. Supported values for sort order are:\n- `true` - ascending order\n\n- `false` - descending order\n\n\nDefault: `{}` (no sorting).\n\nFormat: `{\"field_1\": true, \"field_2\": false, ...}`.\n\nFunctionality: Sorts the results by `field_1` with sort order indicated by its boolean value, then by `field_2` etc.\n\nExample: `{\"topic_code\": true, \"name\": false}` sorts the returned list by `topic_code ascending`, then by `name descending`.\n",
@@ -113713,26 +114975,6 @@
           }
         }
       },
-      "AllowedVisitTypesForEpochType": {
-        "title": "AllowedVisitTypesForEpochType",
-        "required": [
-          "visit_type_uid",
-          "visit_type_name"
-        ],
-        "type": "object",
-        "properties": {
-          "visit_type_uid": {
-            "title": "visit type uid",
-            "type": "string",
-            "description": "Visit Type Term uid"
-          },
-          "visit_type_name": {
-            "title": "visit type name",
-            "type": "string",
-            "description": "Visit type Term name"
-          }
-        }
-      },
       "AnalysisPopulation": {
         "title": "AnalysisPopulation",
         "required": [
@@ -116688,6 +117930,42 @@
           }
         }
       },
+      "CompactOutcomeMeasure": {
+        "title": "CompactOutcomeMeasure",
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "timeframe": {
+            "title": "Timeframe",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          }
+        }
+      },
+      "CompactRegistryIdentifier": {
+        "title": "CompactRegistryIdentifier",
+        "type": "object",
+        "properties": {
+          "secondary_id": {
+            "title": "Secondary Id",
+            "type": "string"
+          },
+          "id_type": {
+            "title": "Id Type",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          }
+        }
+      },
       "CompactStudy": {
         "title": "CompactStudy",
         "required": [
@@ -116733,6 +118011,27 @@
               }
             ],
             "nullable": true
+          }
+        }
+      },
+      "CompactStudyArm": {
+        "title": "CompactStudyArm",
+        "required": [
+          "arm_title"
+        ],
+        "type": "object",
+        "properties": {
+          "arm_type": {
+            "title": "Arm Type",
+            "type": "string"
+          },
+          "arm_title": {
+            "title": "Arm Title",
+            "type": "string"
+          },
+          "arm_description": {
+            "title": "Arm Description",
+            "type": "string"
           }
         }
       },
@@ -117035,7 +118334,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Holds those actions that can be performed on CompoundAliass. Actions are: 'approve', 'edit', 'new_version'."
+            "description": "Holds those actions that can be performed on CompoundAlias. Actions are: 'approve', 'edit', 'new_version'."
           },
           "compound": {
             "$ref": "#/components/schemas/SimpleCompound"
@@ -127481,6 +128780,103 @@
             "type": "string"
           }
         }
+      },
+      "Notification": {
+        "title": "Notification",
+        "required": [
+          "sn",
+          "title",
+          "notification_type"
+        ],
+        "type": "object",
+        "properties": {
+          "sn": {
+            "title": "Sn",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "notification_type": {
+            "title": "Notification Type",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string",
+            "nullable": true
+          },
+          "started_at": {
+            "title": "Started At",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "ended_at": {
+            "title": "Ended At",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "published_at": {
+            "title": "Published At",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "NotificationInput": {
+        "title": "NotificationInput",
+        "required": [
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "title": "Title",
+            "minLength": 1,
+            "type": "string"
+          },
+          "notification_type": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/NotificationType"
+              }
+            ],
+            "default": "information"
+          },
+          "description": {
+            "title": "Description",
+            "minLength": 1,
+            "type": "string"
+          },
+          "started_at": {
+            "title": "Started At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "ended_at": {
+            "title": "Ended At",
+            "type": "string",
+            "format": "date-time"
+          },
+          "published": {
+            "title": "Published",
+            "type": "boolean",
+            "default": false
+          }
+        }
+      },
+      "NotificationType": {
+        "title": "NotificationType",
+        "enum": [
+          "information",
+          "warning",
+          "error"
+        ],
+        "description": "An enumeration."
       },
       "NumericValue": {
         "title": "NumericValue",
@@ -138776,6 +140172,133 @@
               }
             ],
             "nullable": true
+          }
+        }
+      },
+      "StudyPharmaCM": {
+        "title": "StudyPharmaCM",
+        "required": [
+          "unique_protocol_identification_number"
+        ],
+        "type": "object",
+        "properties": {
+          "unique_protocol_identification_number": {
+            "title": "Unique Protocol Identification Number",
+            "type": "string"
+          },
+          "brief_title": {
+            "title": "Brief Title",
+            "type": "string"
+          },
+          "official_title": {
+            "title": "Official Title",
+            "type": "string"
+          },
+          "acronym": {
+            "title": "Acronym",
+            "type": "string"
+          },
+          "study_type": {
+            "title": "Study Type",
+            "type": "string"
+          },
+          "secondary_ids": {
+            "title": "Secondary Ids",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompactRegistryIdentifier"
+            },
+            "default": []
+          },
+          "responsible_party": {
+            "title": "Responsible Party",
+            "type": "string",
+            "default": "Sponsor"
+          },
+          "primary_disease_or_condition_being_studied": {
+            "title": "Primary Disease Or Condition Being Studied",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "primary_purpose": {
+            "title": "Primary Purpose",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "study_phase": {
+            "title": "Study Phase",
+            "type": "string"
+          },
+          "interventional_study_model": {
+            "title": "Interventional Study Model",
+            "type": "string"
+          },
+          "number_of_arms": {
+            "title": "Number Of Arms",
+            "type": "integer"
+          },
+          "allocation": {
+            "title": "Allocation",
+            "type": "string"
+          },
+          "number_of_subjects": {
+            "title": "Number Of Subjects",
+            "type": "integer"
+          },
+          "study_arms": {
+            "title": "Study Arms",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompactStudyArm"
+            },
+            "default": []
+          },
+          "intervention_type": {
+            "title": "Intervention Type",
+            "type": "string",
+            "default": []
+          },
+          "outcome_measures": {
+            "title": "Outcome Measures",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompactOutcomeMeasure"
+            },
+            "default": []
+          },
+          "minimum_age": {
+            "title": "Minimum Age",
+            "type": "string"
+          },
+          "maximum_age": {
+            "title": "Maximum Age",
+            "type": "string"
+          },
+          "accepts_healthy_volunteers": {
+            "title": "Accepts Healthy Volunteers",
+            "type": "boolean"
+          },
+          "inclusion_criteria": {
+            "title": "Inclusion Criteria",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          },
+          "exclusion_criteria": {
+            "title": "Exclusion Criteria",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
           }
         }
       },
