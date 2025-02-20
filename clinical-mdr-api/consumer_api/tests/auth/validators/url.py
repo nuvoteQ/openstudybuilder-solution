@@ -15,4 +15,4 @@ def assert_https_url(value, message):
     assert_url(value, message)
     assert value.lower().startswith(
         "https://"
-    ), f"{message}: URL does not start with https://"
+    ), f"{message}: URL doesn't start with https://"
