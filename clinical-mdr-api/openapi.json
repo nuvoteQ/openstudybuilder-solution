@@ -3,7 +3,7 @@
   "info": {
     "title": "Clinical MDR API",
     "description": "\n## NOTICE\n\nThis license information is applicable to the swagger documentation of the clinical-mdr-api, that is the openapi.json.\n\n## License Terms (MIT)\n\nCopyright (C) 2022 Novo Nordisk A/S, Danish company registration no. 24256790\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n## Licenses and Acknowledgements for Incorporated Software\n\nThis component contains software licensed under different licenses when compiled, please refer to the third-party-licenses.md file for further information and full license texts.\n\n## Authentication\n\nSupports OAuth2 [Authorization Code Flow](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1),\nat paths described in the OpenID Connect Discovery metadata document (whose URL is defined by the `OAUTH_METADATA_URL` environment variable).\n\nMicrosoft Identity Platform documentation can be read \n([here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)).\n\nAuthentication can be turned off with `OAUTH_ENABLED=false` environment variable. \n\nWhen authentication is turned on, all requests to API endpoints must provide a valid bearer (JWT) token inside the `Authorization` http header. \n\nWhen authentication is turned off, all endpoints accept (optional) custom header `X-Test-User-Id` which \nallows any request to specify any user id value. If the `X-Test-User-Id` header is missing, the default value of `unknown-user` is assumed.\n\n## System information:\n\nSystem information is provided by a separate [System Information](./system/docs) sub-app which does not require authentication.\n",
-    "version": "3.0.278"
+    "version": "3.0.292"
   },
   "paths": {
     "/feature-flags/{serial_number}": {
@@ -104636,6 +104636,96 @@
         }
       }
     },
+    "/studies/{study_uid}/study-epochs/audit-trail": {
+      "get": {
+        "tags": [
+          "Study Selections"
+        ],
+        "summary": "List audit trail related to all study epochs within the specified study-uid",
+        "description": "State before:\n - Study and study epoch must exist.\n\nBusiness logic:\n - List all study epoch audit trail within the specified study-uid.\n - If the released or a locked version of the study is selected then only entries up to the time of the study release or lock is included.\n\nState after:\n - no change.\n \nPossible errors:\n - Invalid study-uid.",
+        "operationId": "get_study_epochs_all_audit_trail_studies__study_uid__study_epochs_audit_trail_get",
+        "parameters": [
+          {
+            "description": "The unique id of the study.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Study Uid",
+              "description": "The unique id of the study."
+            },
+            "name": "study_uid",
+            "in": "path"
+          },
+          {
+            "description": "A value to be injected into User object as user id.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "title": "X-Test-User-Id",
+              "description": "A value to be injected into User object as user id."
+            },
+            "name": "x-test-user-id",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StudyEpochVersion"
+                  },
+                  "type": "array",
+                  "title": "Response Get Study Epochs All Audit Trail Studies  Study Uid  Study Epochs Audit Trail Get"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - there exist no selection of the provided study.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/studies/{study_uid}/study-epochs/{study_epoch_uid}": {
       "get": {
         "tags": [
@@ -105004,96 +105094,6 @@
           },
           "404": {
             "description": "Not Found - there exist no selection of the visit for the study provided.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/studies/{study_uid}/study-epoch/audit-trail": {
-      "get": {
-        "tags": [
-          "Study Selections"
-        ],
-        "summary": "List audit trail related to all study epochs within the specified study-uid",
-        "description": "State before:\n - Study and study epoch must exist.\n\nBusiness logic:\n - List all study epoch audit trail within the specified study-uid.\n - If the released or a locked version of the study is selected then only entries up to the time of the study release or lock is included.\n\nState after:\n - no change.\n \nPossible errors:\n - Invalid study-uid.",
-        "operationId": "get_study_epochs_all_audit_trail_studies__study_uid__study_epoch_audit_trail_get",
-        "parameters": [
-          {
-            "description": "The unique id of the study.",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "title": "Study Uid",
-              "description": "The unique id of the study."
-            },
-            "name": "study_uid",
-            "in": "path"
-          },
-          {
-            "description": "A value to be injected into User object as user id.",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "title": "X-Test-User-Id",
-              "description": "A value to be injected into User object as user id."
-            },
-            "name": "x-test-user-id",
-            "in": "header"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/StudyEpochVersion"
-                  },
-                  "type": "array",
-                  "title": "Response Get Study Epochs All Audit Trail Studies  Study Uid  Study Epoch Audit Trail Get"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found - there exist no selection of the provided study.",
             "content": {
               "application/json": {
                 "schema": {
@@ -109266,14 +109266,14 @@
         }
       }
     },
-    "/studies/{study_uid}/study-visit/audit-trail": {
+    "/studies/{study_uid}/study-visits/audit-trail": {
       "get": {
         "tags": [
           "Study Selections"
         ],
         "summary": "List audit trail related to definition of all study visits within the specified study-uid.",
         "description": "State before:\n - Study and study visits must exist.\n\nBusiness logic:\n - List all study visit audit trail within the specified study-uid.\n - If the released or a locked version of the study is selected then only entries up to the time of the study release or lock is included.\n\nState after:\n - no change.\n \nPossible errors:\n - Invalid study-uid.",
-        "operationId": "get_study_visits_all_audit_trail_studies__study_uid__study_visit_audit_trail_get",
+        "operationId": "get_study_visits_all_audit_trail_studies__study_uid__study_visits_audit_trail_get",
         "parameters": [
           {
             "description": "The unique id of the study.",
@@ -109308,7 +109308,7 @@
                     "$ref": "#/components/schemas/StudyVisitVersion"
                   },
                   "type": "array",
-                  "title": "Response Get Study Visits All Audit Trail Studies  Study Uid  Study Visit Audit Trail Get"
+                  "title": "Response Get Study Visits All Audit Trail Studies  Study Uid  Study Visits Audit Trail Get"
                 }
               }
             }
@@ -122514,8 +122514,7 @@
               "$ref": "#/components/schemas/ActivityGroupingHierarchySimpleModel"
             },
             "type": "array",
-            "title": "Activity Groupings",
-            "default": []
+            "title": "Activity Groupings"
           },
           "synonyms": {
             "items": {
@@ -122602,6 +122601,7 @@
           "name",
           "library_name",
           "possible_actions",
+          "activity_groupings",
           "synonyms"
         ],
         "title": "ActivityForStudyActivity"
@@ -148765,7 +148765,7 @@
           "epoch_ctterm": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Study epoch Term"
@@ -148773,7 +148773,7 @@
           "epoch_subtype_ctterm": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Study Epoch subtype Term"
@@ -148781,7 +148781,7 @@
           "epoch_type_ctterm": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Study Epoch type CTTermName"
@@ -149166,7 +149166,7 @@
           "epoch_ctterm": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Study epoch Term"
@@ -149174,7 +149174,7 @@
           "epoch_subtype_ctterm": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Study Epoch subtype Term"
@@ -149182,7 +149182,7 @@
           "epoch_type_ctterm": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Study Epoch type CTTermName"
@@ -155393,11 +155393,6 @@
             "type": "string",
             "title": "Visit Type Uid"
           },
-          "visit_sublabel_codelist_uid": {
-            "type": "string",
-            "title": "Visit Sublabel Codelist Uid",
-            "nullable": true
-          },
           "visit_sublabel_reference": {
             "type": "string",
             "title": "Visit Sublabel Reference",
@@ -155461,7 +155456,7 @@
             "nullable": true
           },
           "study_epoch": {
-            "$ref": "#/components/schemas/CTTermName"
+            "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
           },
           "epoch_uid": {
             "type": "string",
@@ -155473,7 +155468,7 @@
             "title": "Order"
           },
           "visit_type": {
-            "$ref": "#/components/schemas/CTTermName"
+            "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
           },
           "visit_type_name": {
             "type": "string",
@@ -155492,7 +155487,7 @@
           "time_reference": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Time Reference",
@@ -155516,7 +155511,7 @@
           "time_unit": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Time Unit",
@@ -155527,7 +155522,7 @@
             "title": "Visit Contact Mode Uid"
           },
           "visit_contact_mode": {
-            "$ref": "#/components/schemas/CTTermName"
+            "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
           },
           "epoch_allocation_uid": {
             "type": "string",
@@ -155537,7 +155532,7 @@
           "epoch_allocation": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Epoch Allocation",
@@ -155551,7 +155546,7 @@
           "repeating_frequency": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Repeating Frequency",
@@ -155627,11 +155622,6 @@
           "visit_subname": {
             "type": "string",
             "title": "Visit Subname"
-          },
-          "visit_sublabel": {
-            "type": "string",
-            "title": "Visit Sublabel",
-            "nullable": true
           },
           "visit_name": {
             "type": "string",
@@ -155818,10 +155808,6 @@
             "type": "string",
             "title": "Time Unit Uid"
           },
-          "visit_sublabel_codelist_uid": {
-            "type": "string",
-            "title": "Visit Sublabel Codelist Uid"
-          },
           "visit_sublabel_reference": {
             "type": "string",
             "title": "Visit Sublabel Reference"
@@ -155955,10 +155941,6 @@
           "time_unit_uid": {
             "type": "string",
             "title": "Time Unit Uid"
-          },
-          "visit_sublabel_codelist_uid": {
-            "type": "string",
-            "title": "Visit Sublabel Codelist Uid"
           },
           "visit_sublabel_reference": {
             "type": "string",
@@ -156224,11 +156206,6 @@
             "type": "string",
             "title": "Visit Type Uid"
           },
-          "visit_sublabel_codelist_uid": {
-            "type": "string",
-            "title": "Visit Sublabel Codelist Uid",
-            "nullable": true
-          },
           "visit_sublabel_reference": {
             "type": "string",
             "title": "Visit Sublabel Reference",
@@ -156292,7 +156269,7 @@
             "nullable": true
           },
           "study_epoch": {
-            "$ref": "#/components/schemas/CTTermName"
+            "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
           },
           "epoch_uid": {
             "type": "string",
@@ -156304,7 +156281,7 @@
             "title": "Order"
           },
           "visit_type": {
-            "$ref": "#/components/schemas/CTTermName"
+            "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
           },
           "visit_type_name": {
             "type": "string",
@@ -156323,7 +156300,7 @@
           "time_reference": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Time Reference",
@@ -156347,7 +156324,7 @@
           "time_unit": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Time Unit",
@@ -156358,7 +156335,7 @@
             "title": "Visit Contact Mode Uid"
           },
           "visit_contact_mode": {
-            "$ref": "#/components/schemas/CTTermName"
+            "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
           },
           "epoch_allocation_uid": {
             "type": "string",
@@ -156368,7 +156345,7 @@
           "epoch_allocation": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Epoch Allocation",
@@ -156382,7 +156359,7 @@
           "repeating_frequency": {
             "allOf": [
               {
-                "$ref": "#/components/schemas/CTTermName"
+                "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
               }
             ],
             "title": "Repeating Frequency",
@@ -156458,11 +156435,6 @@
           "visit_subname": {
             "type": "string",
             "title": "Visit Subname"
-          },
-          "visit_sublabel": {
-            "type": "string",
-            "title": "Visit Sublabel",
-            "nullable": true
           },
           "visit_name": {
             "type": "string",
