@@ -1,11 +1,315 @@
 {
   "openapi": "3.0.2",
   "info": {
-    "title": "Clinical MDR API",
-    "description": "\n## NOTICE\n\nThis license information is applicable to the swagger documentation of the clinical-mdr-api, that is the openapi.json.\n\n## License Terms (MIT)\n\nCopyright (C) 2022 Novo Nordisk A/S, Danish company registration no. 24256790\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n## Licenses and Acknowledgements for Incorporated Software\n\nThis component contains software licensed under different licenses when compiled, please refer to the third-party-licenses.md file for further information and full license texts.\n\n## Authentication\n\nSupports OAuth2 [Authorization Code Flow](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1),\nat paths described in the OpenID Connect Discovery metadata document (whose URL is defined by the `OAUTH_METADATA_URL` environment variable).\n\nMicrosoft Identity Platform documentation can be read \n([here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)).\n\nAuthentication can be turned off with `OAUTH_ENABLED=false` environment variable. \n\nWhen authentication is turned on, all requests to API endpoints must provide a valid bearer (JWT) token inside the `Authorization` http header. \n\n## System information:\n\nSystem information is provided by a separate [System Information](./system/docs) sub-app which does not require authentication.\n",
-    "version": "3.0.356"
+    "title": "StudyBuilder API",
+    "description": "\n## NOTICE\n\nThis license information is applicable to the swagger documentation of the clinical-mdr-api, that is the openapi.json.\n\n## License Terms (MIT)\n\nCopyright (C) 2025 Novo Nordisk A/S, Danish company registration no. 24256790\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n## Licenses and Acknowledgements for Incorporated Software\n\nThis component contains software licensed under different licenses when compiled, please refer to the third-party-licenses.md file for further information and full license texts.\n\n## Authentication\n\nSupports OAuth2 [Authorization Code Flow](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1),\nat paths described in the OpenID Connect Discovery metadata document (whose URL is defined by the `OAUTH_METADATA_URL` environment variable).\n\nMicrosoft Identity Platform documentation can be read \n([here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)).\n\nAuthentication can be turned off with `OAUTH_ENABLED=false` environment variable. \n\nWhen authentication is turned on, all requests to protected API endpoints must provide a valid bearer (JWT) token inside the `Authorization` http header. \n",
+    "version": "3.0.417"
   },
   "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/information": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Returns various information about this API (running version, etc.)",
+        "operationId": "get_system_information_system_information_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemInformation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/information/build-id": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Returns build id as plain text",
+        "operationId": "get_build_id_system_information_build_id_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/healthcheck": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Returns 200 OK status if the system is ready to serve requests",
+        "operationId": "healthcheck_system_healthcheck_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/information/sbom.md": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Returns SBOM as markdown text",
+        "operationId": "get_sbom_md_system_information_sbom_md_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/system/information/license.md": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Returns license as markdown text",
+        "operationId": "get_license_md_system_information_license_md_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/feature-flags": {
+      "get": {
+        "tags": [
+          "Feature Flags"
+        ],
+        "summary": "Returns all feature flags.",
+        "operationId": "get_all_feature_flags_feature_flags_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/FeatureFlag"
+                  },
+                  "type": "array",
+                  "title": "Response Get All Feature Flags Feature Flags Get"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Feature Flags"
+        ],
+        "summary": "Creates a feature flag.",
+        "operationId": "create_feature_flag_feature_flags_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeatureFlagInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureFlag"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The request could not be completed due to a conflict with the current state of the target resource. This typically occurs when attempting to create or modify a resource that already exists or violates a uniqueness constraint.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ]
+      }
+    },
     "/feature-flags/{serial_number}": {
       "get": {
         "tags": [
@@ -255,95 +559,6 @@
         }
       }
     },
-    "/feature-flags": {
-      "post": {
-        "tags": [
-          "Feature Flags"
-        ],
-        "summary": "Creates a feature flag.",
-        "operationId": "create_feature_flag_feature_flags_post",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FeatureFlagInput"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FeatureFlag"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Entity not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "The request could not be completed due to a conflict with the current state of the target resource. This typically occurs when attempting to create or modify a resource that already exists or violates a uniqueness constraint.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "OAuth2AuthorizationCodeBearer": []
-          },
-          {
-            "BearerJwtAuth": []
-          }
-        ]
-      }
-    },
     "/notifications": {
       "get": {
         "tags": [
@@ -482,6 +697,51 @@
             "BearerJwtAuth": []
           }
         ]
+      }
+    },
+    "/notifications/actives": {
+      "get": {
+        "tags": [
+          "Notifications"
+        ],
+        "summary": "Returns all notifications that are currently published and active.",
+        "operationId": "get_all_active_notifications_notifications_actives_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Notification"
+                  },
+                  "type": "array",
+                  "title": "Response Get All Active Notifications Notifications Actives Get"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/notifications/{serial_number}": {
@@ -1529,6 +1789,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Study Events  Odm Study Event Uid  Relationships Get"
                 }
               }
@@ -2967,6 +3233,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Forms  Odm Form Uid  Relationships Get"
                 }
               }
@@ -4929,6 +5201,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Item Groups  Odm Item Group Uid  Relationships Get"
                 }
               }
@@ -6888,6 +7166,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Items  Odm Item Uid  Relationships Get"
                 }
               }
@@ -8683,6 +8967,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Conditions  Odm Condition Uid  Relationships Get"
                 }
               }
@@ -9958,6 +10248,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Methods  Odm Method Uid  Relationships Get"
                 }
               }
@@ -11223,6 +11519,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Formal Expressions  Odm Formal Expression Uid  Relationships Get"
                 }
               }
@@ -12166,6 +12468,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Descriptions  Odm Description Uid  Relationships Get"
                 }
               }
@@ -12862,6 +13170,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Aliases  Odm Alias Uid  Relationships Get"
                 }
               }
@@ -14380,6 +14694,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Vendor Namespaces  Odm Vendor Namespace Uid  Relationships Get"
                 }
               }
@@ -15635,6 +15955,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Vendor Attributes  Odm Vendor Attribute Uid  Relationships Get"
                 }
               }
@@ -16890,6 +17216,12 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
                   "title": "Response Get Active Relationships Concepts Odms Vendor Elements  Odm Vendor Element Uid  Relationships Get"
                 }
               }
@@ -19651,16 +19983,11 @@
           "required": true
         },
         "responses": {
-          "202": {
-            "description": "Accepted. The content is valid and may be submitted in another request.",
-            "content": {
-              "application/json": {
-                "schema": {}
-              }
-            }
+          "204": {
+            "description": "Accepted. The content is valid and may be submitted in another request."
           },
-          "403": {
-            "description": "Forbidden",
+          "400": {
+            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
             "content": {
               "application/json": {
                 "schema": {
@@ -19669,8 +19996,8 @@
               }
             }
           },
-          "400": {
-            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
+          "403": {
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
@@ -19690,11 +20017,11 @@
             }
           },
           "422": {
-            "description": "Validation Error",
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -24657,11 +24984,16 @@
           "required": true
         },
         "responses": {
-          "202": {
-            "description": "Accepted. The content is valid and may be submitted in another request.",
+          "204": {
+            "description": "Accepted. The content is valid and may be submitted in another request."
+          },
+          "400": {
+            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -24675,22 +25007,12 @@
               }
             }
           },
-          "400": {
-            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
+          "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -29615,11 +29937,16 @@
           "required": true
         },
         "responses": {
-          "202": {
-            "description": "Accepted. The content is valid and may be submitted in another request.",
+          "204": {
+            "description": "Accepted. The content is valid and may be submitted in another request."
+          },
+          "400": {
+            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -29633,22 +29960,12 @@
               }
             }
           },
-          "400": {
-            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
+          "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -34591,11 +34908,16 @@
           "required": true
         },
         "responses": {
-          "202": {
-            "description": "Accepted. The content is valid and may be submitted in another request.",
+          "204": {
+            "description": "Accepted. The content is valid and may be submitted in another request."
+          },
+          "400": {
+            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -34609,22 +34931,12 @@
               }
             }
           },
-          "400": {
-            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
+          "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -39607,11 +39919,16 @@
           "required": true
         },
         "responses": {
-          "202": {
-            "description": "Accepted. The content is valid and may be submitted in another request.",
+          "204": {
+            "description": "Accepted. The content is valid and may be submitted in another request."
+          },
+          "400": {
+            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -39625,22 +39942,12 @@
               }
             }
           },
-          "400": {
-            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
+          "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -44410,11 +44717,16 @@
           "required": true
         },
         "responses": {
-          "202": {
-            "description": "Accepted. The content is valid and may be submitted in another request.",
+          "204": {
+            "description": "Accepted. The content is valid and may be submitted in another request."
+          },
+          "400": {
+            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
             "content": {
               "application/json": {
-                "schema": {}
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
               }
             }
           },
@@ -44428,22 +44740,12 @@
               }
             }
           },
-          "400": {
-            "description": "Forbidden. The content is invalid - Reasons include e.g.: \n- The syntax of the 'name' is not valid.\n- One of the parameters wasn't found.",
+          "422": {
+            "description": "Unprocessable Content",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -48014,7 +48316,7 @@
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "The HAS_TERM relationship was successfully deleted and HAD_TERM relationship was successfully created.\nThe HAS_PARAMETER_TERM relationship was successfully deleted if codelist identified by codelist_uid is a TemplateParameter",
             "content": {
               "application/json": {
@@ -48024,8 +48326,8 @@
               }
             }
           },
-          "403": {
-            "description": "Forbidden",
+          "400": {
+            "description": "Forbidden - Reasons include e.g.: \n- The codelist doesn't exist.\n- The term doesn't exist.\n- The codelist is not extensible.\n- The codelist doesn't have passed term.\n",
             "content": {
               "application/json": {
                 "schema": {
@@ -48034,8 +48336,8 @@
               }
             }
           },
-          "400": {
-            "description": "Forbidden - Reasons include e.g.: \n- The codelist doesn't exist.\n- The term doesn't exist.\n- The codelist is not extensible.\n- The codelist doesn't have passed term.\n",
+          "403": {
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
@@ -50851,7 +51153,7 @@
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "Created - The term was successfully removed as a parent to the term identified by term-uid.",
             "content": {
               "application/json": {
@@ -50861,8 +51163,8 @@
               }
             }
           },
-          "403": {
-            "description": "Forbidden",
+          "400": {
+            "description": "Forbidden - Reasons include e.g.: \n- The term already has no defined parent with given parent-uid and relationship type.\n",
             "content": {
               "application/json": {
                 "schema": {
@@ -50871,8 +51173,8 @@
               }
             }
           },
-          "400": {
-            "description": "Forbidden - Reasons include e.g.: \n- The term already has no defined parent with given parent-uid and relationship type.\n",
+          "403": {
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
@@ -54774,7 +55076,7 @@
           }
         ],
         "responses": {
-          "201": {
+          "200": {
             "description": "The HAS_TERM relationship was successfully deleted and HAD_TERM relationship was successfully created.\nThe HAS_PARAMETER_TERM relationship was successfully deleted if codelist identified by uid is a TemplateParameter",
             "content": {
               "application/json": {
@@ -54784,8 +55086,8 @@
               }
             }
           },
-          "403": {
-            "description": "Forbidden",
+          "400": {
+            "description": "Forbidden - Reasons include e.g.: \n- The codelist doesn't exist.\n- The term doesn't exist.\n- The codelist doesn't have passed term.\n",
             "content": {
               "application/json": {
                 "schema": {
@@ -54794,8 +55096,8 @@
               }
             }
           },
-          "400": {
-            "description": "Forbidden - Reasons include e.g.: \n- The codelist doesn't exist.\n- The term doesn't exist.\n- The codelist doesn't have passed term.\n",
+          "403": {
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
@@ -57742,7 +58044,7 @@
           "Activity Instances"
         ],
         "summary": "Get detailed overview a specific activity instance",
-        "description": "Returns detailed description about activity instance, including information about:\n - Activity\n - Activity subgroups\n - Activity groups\n - Activity instance class\n - Activity items\n - Activity item class\n\nState before:\n - an activity instance with uid must exist.\n\nState after:\n - No change\n\nPossible errors:\n - Invalid uid.",
+        "description": "Returns detailed description about activity instance, including information about:\n - Activity\n - Activity subgroups\n - Activity groups\n - Activity instance class\n - Activity items\n - Activity item class\n\nState before:\n - an activity instance with uid must exist.\n\nState after:\n - No change\n\nPossible errors:\n - Invalid uid.\n\n{_generic_descriptions.DATA_EXPORTS_HEADER}",
         "operationId": "get_activity_instance_overview_concepts_activities_activity_instances__activity_instance_uid__overview_get",
         "security": [
           {
@@ -57790,6 +58092,212 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ActivityInstanceOverview"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/concepts/activities/activity-instances/{activity_instance_uid}/activity-groupings": {
+      "get": {
+        "tags": [
+          "Activity Instances"
+        ],
+        "summary": "Get activity groupings for a specific activity instance",
+        "description": "Returns activity groupings (hierarchy) for an activity instance, including:\n - Activity information with version and library details\n - Activity groups with name and definition\n - Activity subgroups with name and definition\n\nState before:\n - an activity instance with uid must exist.\n\nState after:\n - No change\n\nPossible errors:\n - Invalid uid.\n\n{_generic_descriptions.DATA_EXPORTS_HEADER}",
+        "operationId": "get_activity_instance_groupings_concepts_activities_activity_instances__activity_instance_uid__activity_groupings_get",
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "activity_instance_uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique id of the ActivityInstance",
+              "title": "Activity Instance Uid"
+            },
+            "description": "The unique id of the ActivityInstance"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SimpleActivityInstanceGrouping"
+                  },
+                  "title": "Response 200 Get Activity Instance Groupings Concepts Activities Activity Instances  Activity Instance Uid  Activity Groupings Get"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/concepts/activities/activity-instances/{activity_instance_uid}/activity-items": {
+      "get": {
+        "tags": [
+          "Activity Instances"
+        ],
+        "summary": "Get activity items for a specific activity instance",
+        "description": "Returns activity items for an activity instance, including:\n - Activity item class information (name, role, data type)\n - CT terms (controlled terminology terms)\n - Unit definitions with dimension names\n - ODM forms, item groups, and items\n - ADaM parameter specificity flags\n\nState before:\n - an activity instance with uid must exist.\n\nState after:\n - No change\n\nPossible errors:\n - Invalid uid.\n\n{_generic_descriptions.DATA_EXPORTS_HEADER}",
+        "operationId": "get_activity_instance_items_concepts_activities_activity_instances__activity_instance_uid__activity_items_get",
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "activity_instance_uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique id of the ActivityInstance",
+              "title": "Activity Instance Uid"
+            },
+            "description": "The unique id of the ActivityInstance"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SimplifiedActivityItem"
+                  },
+                  "title": "Response 200 Get Activity Instance Items Concepts Activities Activity Instances  Activity Instance Uid  Activity Items Get"
                 }
               }
             }
@@ -59148,6 +59656,83 @@
         }
       }
     },
+    "/activity-instance-classes/{activity_instance_class_uid}/activity-item-classes": {
+      "get": {
+        "tags": [
+          "Activity Instance Classes"
+        ],
+        "summary": "List Activity Item Classes linked to given Activity Instance Class",
+        "description": "State before:\n - uid must exist.\n\nBusiness logic:\n - List activity item classes linked to given activity instance class\n\nState after:\n - No change\n\nPossible errors:\n - Invalid uid.",
+        "operationId": "get_activity_item_classes_activity_instance_classes__activity_instance_class_uid__activity_item_classes_get",
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "activity_instance_class_uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique id of the ActivityInstanceClass",
+              "title": "Activity Instance Class Uid"
+            },
+            "description": "The unique id of the ActivityInstanceClass"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/clinical_mdr_api__models__biomedical_concepts__activity_instance_class__CompactActivityItemClass"
+                  },
+                  "title": "Response Get Activity Item Classes Activity Instance Classes  Activity Instance Class Uid  Activity Item Classes Get"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/activity-instance-classes/{activity_instance_class_uid}/versions": {
       "get": {
         "tags": [
@@ -59309,6 +59894,203 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/activity-instance-classes/model-mappings/datasets": {
+      "get": {
+        "tags": [
+          "Activity Instance Classes"
+        ],
+        "summary": "Returns all mapped dataset (domain) uids",
+        "description": "Response format:\n\n- In addition to retrieving data in JSON format (default behaviour), \nit is possible to request data to be returned in CSV, XML or Excel formats \nby sending the `Accept` http request header with one of the following values:\n  - `text/csv`\n\n  - `text/xml`\n\n  - `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`",
+        "operationId": "get_mapped_datasets_activity_instance_classes_model_mappings_datasets_get",
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "activity_instance_class_uid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optionally, the uid of a specific ActivityInstanceClass",
+              "title": "Activity Instance Class Uid"
+            },
+            "description": "Optionally, the uid of a specific ActivityInstanceClass"
+          },
+          {
+            "name": "include_sponsor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Whether to include sponsor datasets in the output or not. Defaults to True",
+              "default": true,
+              "title": "Include Sponsor"
+            },
+            "description": "Whether to include sponsor datasets in the output or not. Defaults to True"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ActivityInstanceClassWithDataset"
+                  },
+                  "title": "Response Get Mapped Datasets Activity Instance Classes Model Mappings Datasets Get"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/activity-instance-classes/{activity_instance_class_uid}/model-mappings": {
+      "patch": {
+        "tags": [
+          "Activity Instance Classes"
+        ],
+        "summary": "Edit the mapping to dataset class",
+        "description": "State before:\n - uid must exist\n\nBusiness logic:\n- Mapping to dataset class is replaced with the provided one\n\nPossible errors:\n- Invalid uid",
+        "operationId": "patch_mappings_activity_instance_classes__activity_instance_class_uid__model_mappings_patch",
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "activity_instance_class_uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique id of the ActivityInstanceClass",
+              "title": "Activity Instance Class Uid"
+            },
+            "description": "The unique id of the ActivityInstanceClass"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActivityInstanceClassMappingInput",
+                "description": "The uid of dataset classes to map activity instance class to."
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityInstanceClass"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Reasons include e.g.: \n- The activity instance class with the specified 'activity_instance_class_uid' could not be found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -60464,14 +61246,14 @@
         }
       }
     },
-    "/activity-item-classes/{activity_item_class_uid}/terms": {
+    "/activity-item-classes/{activity_item_class_uid}/datasets/{dataset_uid}/terms": {
       "get": {
         "tags": [
           "Activity Item Classes"
         ],
         "summary": "Returns all terms names and attributes.",
         "description": "Response format:\n\n- In addition to retrieving data in JSON format (default behaviour), \nit is possible to request data to be returned in CSV, XML or Excel formats \nby sending the `Accept` http request header with one of the following values:\n  - `text/csv`\n\n  - `text/xml`\n\n  - `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`",
-        "operationId": "get_all_terms_activity_item_classes__activity_item_class_uid__terms_get",
+        "operationId": "get_all_terms_activity_item_classes__activity_item_class_uid__datasets__dataset_uid__terms_get",
         "security": [
           {
             "OAuth2AuthorizationCodeBearer": []
@@ -60491,6 +61273,17 @@
               "title": "Activity Item Class Uid"
             },
             "description": "The unique id of the ActivityItemClass"
+          },
+          {
+            "name": "dataset_uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique id of the Dataset",
+              "title": "Dataset Uid"
+            },
+            "description": "The unique id of the Dataset"
           },
           {
             "name": "sort_by",
@@ -68564,6 +69357,18 @@
               "title": "Total Count"
             },
             "description": "Boolean value specifying whether total count of entities should be included in the response.\n\nFunctionality: retrieve total count of queried entities.\n\n"
+          },
+          {
+            "name": "split_activity_by_groupings",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "\nSpecifies whether Activity should be split into separate rows if it contains multiple groupings.\n\nIf equals to true, only library_name, sort_by, page_number, page_size, total_count, filters and operator Query parameters will be applied into the query.",
+              "default": false,
+              "title": "Split Activity By Groupings"
+            },
+            "description": "\nSpecifies whether Activity should be split into separate rows if it contains multiple groupings.\n\nIf equals to true, only library_name, sort_by, page_number, page_size, total_count, filters and operator Query parameters will be applied into the query."
           }
         ],
         "responses": {
@@ -68572,7 +69377,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CustomPage_Activity_"
+                  "$ref": "#/components/schemas/CustomPage_Union_Activity__CompactActivity__"
                 }
               }
             }
@@ -68811,25 +69616,6 @@
               "title": "Activity Group Names[]"
             },
             "description": "A list of activity group names to use as a specific filter"
-          },
-          {
-            "name": "group_by_groupings",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "boolean"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "description": "A boolean property to specify if the activities will be grouped by sub group and group or not, so we won't loose the information about which activity instances has each group",
-              "default": true,
-              "title": "Group By Groupings"
-            },
-            "description": "A boolean property to specify if the activities will be grouped by sub group and group or not, so we won't loose the information about which activity instances has each group"
           },
           {
             "name": "page_number",
@@ -69232,6 +70018,18 @@
               "title": "Page Size"
             },
             "description": "Optionally, the number of results to return. Default = 10."
+          },
+          {
+            "name": "split_activity_by_groupings",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "\nSpecifies whether Activity should be split into separate rows if it contains multiple groupings.\n\nIf equals to true, only library_name, sort_by, page_number, page_size, total_count, filters and operator Query parameters will be applied into the query.",
+              "default": false,
+              "title": "Split Activity By Groupings"
+            },
+            "description": "\nSpecifies whether Activity should be split into separate rows if it contains multiple groupings.\n\nIf equals to true, only library_name, sort_by, page_number, page_size, total_count, filters and operator Query parameters will be applied into the query."
           }
         ],
         "responses": {
@@ -71940,6 +72738,266 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ActivitySubGroupOverview"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/concepts/activities/activity-sub-groups/{activity_subgroup_uid}/activities": {
+      "get": {
+        "tags": [
+          "Activity Subgroups"
+        ],
+        "summary": "Get activities linked to a specific activity subgroup version",
+        "description": "Returns a list of activities linked to the specified version of an activity subgroup.\nIf no version is provided, the latest version of the activity subgroup is used.\n- Results are paginated based on provided parameters\n- Setting page_size=0 will return all items without pagination\n\n{_generic_descriptions.DATA_EXPORTS_HEADER}",
+        "operationId": "get_activities_for_activity_subgroup_concepts_activities_activity_sub_groups__activity_subgroup_uid__activities_get",
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "activity_subgroup_uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique id of the ActivitySubGroup",
+              "title": "Activity Subgroup Uid"
+            },
+            "description": "The unique id of the ActivitySubGroup"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Select specific version, omit to view latest version",
+              "title": "Version"
+            },
+            "description": "Select specific version, omit to view latest version"
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+              "default": 1,
+              "title": "Page Number"
+            },
+            "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 0,
+              "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+              "default": 10,
+              "title": "Page Size"
+            },
+            "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n"
+          },
+          {
+            "name": "total_count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Boolean value specifying whether total count of entities should be included in the response.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+              "default": false,
+              "title": "Total Count"
+            },
+            "description": "Boolean value specifying whether total count of entities should be included in the response.\n\nFunctionality: retrieve total count of queried entities.\n\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomPage_SimpleActivity_"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/concepts/activities/activity-sub-groups/{activity_subgroup_uid}/activity-groups": {
+      "get": {
+        "tags": [
+          "Activity Subgroups"
+        ],
+        "summary": "Get activity groups for a specific activity subgroup",
+        "description": "Returns activity groups linked to a specific activity subgroup.\nResults are paginated and suitable for export with each group on a separate row.\n\n{_generic_descriptions.DATA_EXPORTS_HEADER}",
+        "operationId": "get_activity_groups_for_subgroup_concepts_activities_activity_sub_groups__activity_subgroup_uid__activity_groups_get",
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "activity_subgroup_uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique id of the ActivitySubGroup",
+              "title": "Activity Subgroup Uid"
+            },
+            "description": "The unique id of the ActivitySubGroup"
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Select specific version, omit to view latest version",
+              "title": "Version"
+            },
+            "description": "Select specific version, omit to view latest version"
+          },
+          {
+            "name": "page_number",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n",
+              "default": 1,
+              "title": "Page Number"
+            },
+            "description": "\nPage number of the returned list of entities.\n\nFunctionality : provided together with `page_size`, selects a page to retrieve for paginated results.\n\nErrors: `page_size` not provided, `page_number` must be equal or greater than 1.\n"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 1000,
+              "minimum": 0,
+              "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n",
+              "default": 10,
+              "title": "Page Size"
+            },
+            "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n"
+          },
+          {
+            "name": "total_count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Boolean value specifying whether total count of entities should be included in the response.\n\nFunctionality: retrieve total count of queried entities.\n\n",
+              "default": false,
+              "title": "Total Count"
+            },
+            "description": "Boolean value specifying whether total count of entities should be included in the response.\n\nFunctionality: retrieve total count of queried entities.\n\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomPage_ActivityGroup_"
                 }
               }
             }
@@ -83706,6 +84764,101 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/studies/list": {
+      "get": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Returns a list of studies with their ids and acronyms.",
+        "description": "Returns a list of studies",
+        "operationId": "get_studies_list_studies_list_get",
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "minimal_response",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Indicates whether to return minimal response with only `uid`, `id` and `acronym`.",
+              "default": true,
+              "title": "Minimal Response"
+            },
+            "description": "Indicates whether to return minimal response with only `uid`, `id` and `acronym`."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/StudySimple"
+                      },
+                      {
+                        "$ref": "#/components/schemas/StudyMinimal"
+                      }
+                    ]
+                  },
+                  "title": "Response Get Studies List Studies List Get"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -99615,6 +100768,24 @@
             "description": "The unique id of the study activity."
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/StudyActivitySyncLatestVersionInput"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "description": "Parameters for the StudyActivity to sync to latest version of Library Activity",
+                "title": "Sync Latest Version Input"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "Successful Response",
@@ -101427,16 +102598,6 @@
           },
           "404": {
             "description": "Entity not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Unsupported method",
             "content": {
               "application/json": {
                 "schema": {
@@ -116266,6 +117427,18 @@
               "title": "Study Uid"
             },
             "description": "The unique id of the study."
+          },
+          {
+            "name": "validate_only",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Indicates whether only validation of consecutive visit group assignment should be performed",
+              "default": false,
+              "title": "Validate Only"
+            },
+            "description": "Indicates whether only validation of consecutive visit group assignment should be performed"
           }
         ],
         "requestBody": {
@@ -129603,10 +130776,17 @@
             "title": "Library Name"
           },
           "possible_actions": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Possible Actions",
             "description": "Holds those actions that can be performed on the ActivityInstances. Actions are: 'approve', 'edit', 'new_version'."
           },
@@ -129635,10 +130815,17 @@
             "nullable": true
           },
           "activity_groupings": {
-            "items": {
-              "$ref": "#/components/schemas/ActivityGroupingHierarchySimpleModel"
-            },
-            "type": "array",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ActivityGroupingHierarchySimpleModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Activity Groupings"
           },
           "activity_instances": {
@@ -129746,13 +130933,14 @@
           },
           "is_finalized": {
             "type": "boolean",
-            "title": "Computed boolean value based on is_request_rejected and replaced_by_activity",
+            "title": "Is Finalized",
             "description": "Evaluates to false, if is_request_rejected is false and replaced_by_activity is null else true",
             "default": false
           },
           "is_used_by_legacy_instances": {
             "type": "boolean",
-            "title": "True if all instances linked to given Activity are legacy_used.",
+            "title": "Is Used By Legacy Instances",
+            "description": "True if all instances linked to given Activity are legacy_used.",
             "default": false
           }
         },
@@ -130166,10 +131354,17 @@
             "title": "Library Name"
           },
           "possible_actions": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Possible Actions",
             "description": "Holds those actions that can be performed on the ActivityInstances. Actions are: 'approve', 'edit', 'new_version'."
           },
@@ -130198,10 +131393,17 @@
             "nullable": true
           },
           "activity_groupings": {
-            "items": {
-              "$ref": "#/components/schemas/ActivityGroupingHierarchySimpleModel"
-            },
-            "type": "array",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ActivityGroupingHierarchySimpleModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Activity Groupings"
           },
           "activity_instances": {
@@ -130309,13 +131511,14 @@
           },
           "is_finalized": {
             "type": "boolean",
-            "title": "Computed boolean value based on is_request_rejected and replaced_by_activity",
+            "title": "Is Finalized",
             "description": "Evaluates to false, if is_request_rejected is false and replaced_by_activity is null else true",
             "default": false
           },
           "is_used_by_legacy_instances": {
             "type": "boolean",
-            "title": "True if all instances linked to given Activity are legacy_used.",
+            "title": "Is Used By Legacy Instances",
+            "description": "True if all instances linked to given Activity are legacy_used.",
             "default": false
           }
         },
@@ -130810,8 +132013,15 @@
       "ActivityInstance": {
         "properties": {
           "start_date": {
-            "type": "string",
-            "format": "date-time",
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Start Date"
           },
           "end_date": {
@@ -130828,15 +132038,36 @@
             "nullable": true
           },
           "status": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Status"
           },
           "version": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Version"
           },
           "change_description": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Change Description"
           },
           "author_username": {
@@ -130908,10 +132139,17 @@
             "title": "Library Name"
           },
           "possible_actions": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Possible Actions",
             "description": "Holds those actions that can be performed on the ActivityInstances. Actions are: 'approve', 'edit', 'new_version'."
           },
@@ -131018,10 +132256,17 @@
             "nullable": true
           },
           "activity_groupings": {
-            "items": {
-              "$ref": "#/components/schemas/ActivityInstanceHierarchySimpleModel"
-            },
-            "type": "array",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ActivityInstanceHierarchySimpleModel"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Activity Groupings"
           },
           "activity_name": {
@@ -131041,10 +132286,17 @@
             "description": "The uid and the name of the linked activity instance class"
           },
           "activity_items": {
-            "items": {
-              "$ref": "#/components/schemas/ActivityItem"
-            },
-            "type": "array",
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/ActivityItem"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Activity Items",
             "description": "List of activity items"
           }
@@ -131225,47 +132477,6 @@
             ],
             "nullable": true
           },
-          "dataset_class": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/clinical_mdr_api__models__biomedical_concepts__activity_instance_class__SimpleDatasetClass"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "nullable": true
-          },
-          "activity_item_classes": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/clinical_mdr_api__models__biomedical_concepts__activity_instance_class__CompactActivityItemClass"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Activity Item Classes",
-            "nullable": true
-          },
-          "data_domains": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/DataDomain"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Data Domains",
-            "nullable": true
-          },
           "library_name": {
             "anyOf": [
               {
@@ -131388,20 +132599,6 @@
             ],
             "title": "Dataset Class Uid"
           },
-          "data_domain_uids": {
-            "anyOf": [
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Data Domain Uids"
-          },
           "change_description": {
             "anyOf": [
               {
@@ -131417,6 +132614,19 @@
         },
         "type": "object",
         "title": "ActivityInstanceClassInput"
+      },
+      "ActivityInstanceClassMappingInput": {
+        "properties": {
+          "dataset_class_uid": {
+            "type": "string",
+            "title": "Dataset Class Uid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "dataset_class_uid"
+        ],
+        "title": "ActivityInstanceClassMappingInput"
       },
       "ActivityInstanceClassRelInput": {
         "properties": {
@@ -131447,6 +132657,40 @@
           "mandatory"
         ],
         "title": "ActivityInstanceClassRelInput"
+      },
+      "ActivityInstanceClassWithDataset": {
+        "properties": {
+          "uid": {
+            "type": "string",
+            "title": "Uid",
+            "nullable": false
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "nullable": false
+          },
+          "datasets": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Datasets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uid",
+          "name"
+        ],
+        "title": "ActivityInstanceClassWithDataset"
       },
       "ActivityInstanceCreateInput": {
         "properties": {
@@ -134205,6 +135449,20 @@
             "type": "boolean",
             "title": "Is Adam Param Specific"
           },
+          "odm_forms": {
+            "items": {
+              "$ref": "#/components/schemas/CompactOdmForm"
+            },
+            "type": "array",
+            "title": "Odm Forms"
+          },
+          "odm_item_groups": {
+            "items": {
+              "$ref": "#/components/schemas/CompactOdmItemGroup"
+            },
+            "type": "array",
+            "title": "Odm Item Groups"
+          },
           "odm_items": {
             "items": {
               "$ref": "#/components/schemas/CompactOdmItem"
@@ -134358,21 +135616,6 @@
             ],
             "title": "Activity Instance Classes"
           },
-          "codelists": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/SimpleCTCodelist"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Codelists",
-            "nullable": true
-          },
           "variable_classes": {
             "anyOf": [
               {
@@ -134478,13 +135721,6 @@
           "library_name": {
             "type": "string",
             "title": "Library Name"
-          },
-          "codelist_uids": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Codelist Uids"
           }
         },
         "type": "object",
@@ -134603,13 +135839,6 @@
               }
             ],
             "title": "Data Type Uid"
-          },
-          "codelist_uids": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "title": "Codelist Uids"
           }
         },
         "type": "object",
@@ -134653,6 +135882,20 @@
             "type": "boolean",
             "title": "Is Adam Param Specific"
           },
+          "odm_form_uids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Odm Form Uids"
+          },
+          "odm_item_group_uids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Odm Item Group Uids"
+          },
           "odm_item_uids": {
             "items": {
               "type": "string"
@@ -134666,8 +135909,7 @@
           "activity_item_class_uid",
           "ct_term_uids",
           "unit_definition_uids",
-          "is_adam_param_specific",
-          "odm_item_uids"
+          "is_adam_param_specific"
         ],
         "title": "ActivityItemCreateInput"
       },
@@ -134855,10 +136097,17 @@
             "title": "Library Name"
           },
           "possible_actions": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Possible Actions",
             "description": "Holds those actions that can be performed on the ActivityInstances. Actions are: 'approve', 'edit', 'new_version'."
           },
@@ -135163,13 +136412,6 @@
           "activity_subgroup": {
             "$ref": "#/components/schemas/ActivitySubGroupDetail"
           },
-          "activities": {
-            "items": {
-              "$ref": "#/components/schemas/clinical_mdr_api__models__concepts__activities__activity__SimpleActivity"
-            },
-            "type": "array",
-            "title": "Activities"
-          },
           "all_versions": {
             "items": {
               "type": "string"
@@ -135181,7 +136423,6 @@
         "type": "object",
         "required": [
           "activity_subgroup",
-          "activities",
           "all_versions"
         ],
         "title": "ActivitySubGroupOverview"
@@ -135470,7 +136711,8 @@
                 "type": "null"
               }
             ],
-            "title": "CT codelist",
+            "title": "Ct Cd List Cd",
+            "description": "CT codelist",
             "nullable": true
           },
           "ct_cd_list_extensible": {
@@ -135482,8 +136724,8 @@
                 "type": "null"
               }
             ],
-            "title": "CT codelist extensible",
-            "description": "Is CT codelist extensible",
+            "title": "Ct Cd List Extensible",
+            "description": "CT codelist extensible",
             "nullable": true
           },
           "ct_cd_list_nm": {
@@ -135495,7 +136737,8 @@
                 "type": "null"
               }
             ],
-            "title": "CT codelist name",
+            "title": "Ct Cd List Nm",
+            "description": "CT codelist name",
             "nullable": true
           },
           "ct_cd_list_submval": {
@@ -135507,7 +136750,8 @@
                 "type": "null"
               }
             ],
-            "title": "CT codelist submission value",
+            "title": "Ct Cd List Submval",
+            "description": "CT codelist submission value",
             "nullable": true
           },
           "ct_scope": {
@@ -135519,7 +136763,7 @@
                 "type": "null"
               }
             ],
-            "title": "CT scope",
+            "title": "Ct Scope",
             "description": "CT scope",
             "nullable": true
           },
@@ -135532,7 +136776,7 @@
                 "type": "null"
               }
             ],
-            "title": "CT version",
+            "title": "Ct Ver",
             "description": "CT version",
             "nullable": true
           },
@@ -135557,7 +136801,8 @@
                 "type": "null"
               }
             ],
-            "title": "NCI preferred term",
+            "title": "Nci Pref Term",
+            "description": "NCI preferred term",
             "nullable": true
           },
           "pkg_nm": {
@@ -135569,7 +136814,8 @@
                 "type": "null"
               }
             ],
-            "title": "Package name",
+            "title": "Pkg Nm",
+            "description": "Package name",
             "nullable": true
           },
           "synonyms": {
@@ -135599,7 +136845,8 @@
                 "type": "null"
               }
             ],
-            "title": "Package scope",
+            "title": "Pkg Scope",
+            "description": "Package scope",
             "nullable": true
           },
           "pkg_nm": {
@@ -135611,7 +136858,8 @@
                 "type": "null"
               }
             ],
-            "title": "Package name",
+            "title": "Pkg Nm",
+            "description": "Package name",
             "nullable": true
           }
         },
@@ -135629,7 +136877,8 @@
                 "type": "null"
               }
             ],
-            "title": "CT Code",
+            "title": "Ct Cd",
+            "description": "CT Code",
             "nullable": true
           },
           "ct_cd_list_submval": {
@@ -135641,7 +136890,8 @@
                 "type": "null"
               }
             ],
-            "title": "CT codelist submission value",
+            "title": "Ct Cd List Submval",
+            "description": "CT codelist submission value",
             "nullable": true
           },
           "ct_scope": {
@@ -135653,7 +136903,7 @@
                 "type": "null"
               }
             ],
-            "title": "CT scope",
+            "title": "Ct Scope",
             "nullable": true
           },
           "ct_submval": {
@@ -135665,7 +136915,8 @@
                 "type": "null"
               }
             ],
-            "title": "CT code submission value",
+            "title": "Ct Submval",
+            "description": "CT code submission value",
             "nullable": true
           },
           "ct_ver": {
@@ -135677,7 +136928,8 @@
                 "type": "null"
               }
             ],
-            "title": "CT version",
+            "title": "Ct Ver",
+            "description": "CT version",
             "nullable": true
           },
           "definition": {
@@ -135701,7 +136953,8 @@
                 "type": "null"
               }
             ],
-            "title": "NCI preferred term",
+            "title": "Nci Pref Term",
+            "description": "NCI preferred term",
             "nullable": true
           },
           "pkg_nm": {
@@ -135713,7 +136966,8 @@
                 "type": "null"
               }
             ],
-            "title": "Package name",
+            "title": "Pkg Nm",
+            "description": "Package name",
             "nullable": true
           },
           "synonyms": {
@@ -135743,7 +136997,7 @@
                 "type": "null"
               }
             ],
-            "title": "CT scope",
+            "title": "Ct Scope",
             "nullable": true
           },
           "ct_ver": {
@@ -135755,7 +137009,7 @@
                 "type": "null"
               }
             ],
-            "title": "CT version",
+            "title": "Ct Ver",
             "nullable": true
           },
           "pkg_nm": {
@@ -135767,7 +137021,8 @@
                 "type": "null"
               }
             ],
-            "title": "Package name",
+            "title": "Pkg Nm",
+            "description": "Package name",
             "nullable": true
           }
         },
@@ -139260,6 +140515,64 @@
         ],
         "title": "CommentTopic"
       },
+      "CompactActivity": {
+        "properties": {
+          "uid": {
+            "type": "string",
+            "title": "Uid"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "is_data_collected": {
+            "type": "boolean",
+            "title": "Is Data Collected"
+          },
+          "is_used_by_legacy_instances": {
+            "type": "boolean",
+            "title": "Is Used By Legacy Instances"
+          },
+          "activity_group_uid": {
+            "type": "string",
+            "title": "Activity Group Uid"
+          },
+          "activity_group_name": {
+            "type": "string",
+            "title": "Activity Group Name"
+          },
+          "activity_subgroup_uid": {
+            "type": "string",
+            "title": "Activity Subgroup Uid"
+          },
+          "activity_subgroup_name": {
+            "type": "string",
+            "title": "Activity Subgroup Name"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "library_name": {
+            "type": "string",
+            "title": "Library Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uid",
+          "name",
+          "is_data_collected",
+          "is_used_by_legacy_instances",
+          "activity_group_uid",
+          "activity_group_name",
+          "activity_subgroup_uid",
+          "activity_subgroup_name",
+          "status",
+          "library_name"
+        ],
+        "title": "CompactActivity"
+      },
       "CompactCTTerm": {
         "properties": {
           "uid": {
@@ -139289,6 +140602,48 @@
         },
         "type": "object",
         "title": "CompactCTTerm"
+      },
+      "CompactOdmForm": {
+        "properties": {
+          "uid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uid",
+            "nullable": true
+          },
+          "oid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oid",
+            "nullable": true
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "title": "CompactOdmForm"
       },
       "CompactOdmItem": {
         "properties": {
@@ -139331,6 +140686,48 @@
         },
         "type": "object",
         "title": "CompactOdmItem"
+      },
+      "CompactOdmItemGroup": {
+        "properties": {
+          "uid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Uid",
+            "nullable": true
+          },
+          "oid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oid",
+            "nullable": true
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "title": "CompactOdmItemGroup"
       },
       "CompactOutcomeMeasure": {
         "properties": {
@@ -139618,7 +141015,7 @@
           }
         },
         "type": "object",
-        "title": "CompactStudyIdentificationMetadata"
+        "title": "Identification metadata for study definition"
       },
       "CompactStudyMetadataJsonModel": {
         "properties": {
@@ -139657,7 +141054,7 @@
           }
         },
         "type": "object",
-        "title": "StudyMetadata"
+        "title": "Compact Study Metadata"
       },
       "CompactUnitDefinition": {
         "properties": {
@@ -145038,6 +146435,40 @@
         ],
         "title": "CustomPage[PharmaceuticalProduct]"
       },
+      "CustomPage_SimpleActivity_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/clinical_mdr_api__models__concepts__activities__activity__SimpleActivity"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Page"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size"
+        ],
+        "title": "CustomPage[SimpleActivity]"
+      },
       "CustomPage_SimpleCompound_": {
         "properties": {
           "items": {
@@ -146330,6 +147761,47 @@
         ],
         "title": "CustomPage[TopicCdDef]"
       },
+      "CustomPage_Union_Activity__CompactActivity__": {
+        "properties": {
+          "items": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Activity"
+                },
+                {
+                  "$ref": "#/components/schemas/CompactActivity"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Total"
+          },
+          "page": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Page"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Size"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "total",
+          "page",
+          "size"
+        ],
+        "title": "CustomPage[Union[Activity, CompactActivity]]"
+      },
       "CustomPage_Union_CTTermName__CTTermNameSimple__": {
         "properties": {
           "items": {
@@ -146472,48 +147944,6 @@
           "size"
         ],
         "title": "CustomPage[VisitName]"
-      },
-      "DataDomain": {
-        "properties": {
-          "uid": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Uid",
-            "nullable": true
-          },
-          "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name",
-            "nullable": true
-          },
-          "code_submission_value": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Code Submission Value",
-            "nullable": true
-          }
-        },
-        "type": "object",
-        "title": "DataDomain"
       },
       "DataModel": {
         "properties": {
@@ -146953,6 +148383,18 @@
             "type": "array",
             "title": "Value List"
           },
+          "analysis_variable_set": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Analysis Variable Set",
+            "nullable": true
+          },
           "dataset": {
             "$ref": "#/components/schemas/SimpleDataset"
           },
@@ -147036,14 +148478,14 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
           "start_date": {
             "type": "string",
             "format": "date-time",
-            "title": "start_date",
+            "title": "Start Date",
             "description": "The most recent point in time when the study selection was edited. The format is ISO 8601 in UTC\u00b10, e.g.: '2020-10-31T16:00:00+00:00' for October 31, 2020 at 6pm in UTC+2 timezone."
           },
           "end_date": {
@@ -148173,7 +149615,7 @@
           }
         },
         "type": "object",
-        "title": "Duration"
+        "title": "Duration model to store ISO8601 duration"
       },
       "Endpoint": {
         "properties": {
@@ -152648,7 +154090,8 @@
         "properties": {
           "id": {
             "type": "string",
-            "title": "Unique identifier for the user"
+            "title": "Id",
+            "description": "Unique identifier for the user"
           },
           "displayName": {
             "anyOf": [
@@ -152659,7 +154102,8 @@
                 "type": "null"
               }
             ],
-            "title": "Name displayed in the address book for the user",
+            "title": "Displayname",
+            "description": "Name displayed in the address book for the user",
             "nullable": true
           },
           "givenName": {
@@ -152671,7 +154115,8 @@
                 "type": "null"
               }
             ],
-            "title": "First name of the user",
+            "title": "Givenname",
+            "description": "First name of the user",
             "nullable": true
           },
           "mail": {
@@ -152683,7 +154128,8 @@
                 "type": "null"
               }
             ],
-            "title": "User's email address",
+            "title": "Mail",
+            "description": "User's email address",
             "nullable": true
           },
           "surname": {
@@ -152695,7 +154141,8 @@
                 "type": "null"
               }
             ],
-            "title": "Last name of the user",
+            "title": "Surname",
+            "description": "Last name of the user",
             "nullable": true
           }
         },
@@ -152906,7 +154353,7 @@
           }
         },
         "type": "object",
-        "title": "high_level_study_design"
+        "title": "High level study design parameters for study definition"
       },
       "HighLevelStudyDesignJsonModel-Output": {
         "properties": {
@@ -153096,7 +154543,7 @@
           }
         },
         "type": "object",
-        "title": "high_level_study_design"
+        "title": "High level study design parameters for study definition"
       },
       "IndexedTemplateParameterTerm": {
         "properties": {
@@ -154168,7 +155615,8 @@
                 "type": "null"
               }
             ],
-            "title": "name of variable",
+            "title": "Name",
+            "description": "name of variable",
             "nullable": true
           },
           "type": {
@@ -154180,7 +155628,8 @@
                 "type": "null"
               }
             ],
-            "title": "type of variable",
+            "title": "Type",
+            "description": "type of variable",
             "nullable": true
           },
           "length": {
@@ -154192,7 +155641,8 @@
                 "type": "null"
               }
             ],
-            "title": "length of variable",
+            "title": "Length",
+            "description": "length of variable",
             "nullable": true
           },
           "label": {
@@ -154204,7 +155654,8 @@
                 "type": "null"
               }
             ],
-            "title": "label of variable",
+            "title": "Label",
+            "description": "label of variable",
             "nullable": true
           },
           "format": {
@@ -154216,7 +155667,8 @@
                 "type": "null"
               }
             ],
-            "title": "SAS format of variable",
+            "title": "Format",
+            "description": "SAS format of variable",
             "nullable": true
           },
           "informat": {
@@ -154228,7 +155680,8 @@
                 "type": "null"
               }
             ],
-            "title": "SAS informat of variable",
+            "title": "Informat",
+            "description": "SAS informat of variable",
             "nullable": true
           }
         },
@@ -159504,7 +160957,8 @@
           "datatype": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "minLength": 1
               },
               {
                 "type": "null"
@@ -159534,8 +160988,7 @@
                 "type": "null"
               }
             ],
-            "title": "Length",
-            "nullable": true
+            "title": "Length"
           },
           "significant_digits": {
             "anyOf": [
@@ -159548,8 +161001,7 @@
                 "type": "null"
               }
             ],
-            "title": "Significant Digits",
-            "nullable": true
+            "title": "Significant Digits"
           },
           "sas_field_name": {
             "anyOf": [
@@ -159718,8 +161170,7 @@
                 "type": "null"
               }
             ],
-            "title": "Length",
-            "nullable": true
+            "title": "Length"
           },
           "significant_digits": {
             "anyOf": [
@@ -159732,8 +161183,7 @@
                 "type": "null"
               }
             ],
-            "title": "Significant Digits",
-            "nullable": true
+            "title": "Significant Digits"
           },
           "sas_field_name": {
             "anyOf": [
@@ -159830,9 +161280,7 @@
         "type": "object",
         "required": [
           "name",
-          "datatype",
-          "descriptions",
-          "alias_uids"
+          "datatype"
         ],
         "title": "OdmItemPostInput"
       },
@@ -162063,102 +163511,6 @@
         ],
         "title": "OdmVendorsPostInput"
       },
-      "ParentActivityItemClass": {
-        "properties": {
-          "uid": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Uid",
-            "nullable": true
-          },
-          "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name",
-            "nullable": true
-          },
-          "mandatory": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Mandatory",
-            "nullable": true
-          },
-          "is_adam_param_specific_enabled": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Is Adam Param Specific Enabled",
-            "nullable": true
-          }
-        },
-        "type": "object",
-        "title": "ParentActivityItemClass"
-      },
-      "ParentDataDomain": {
-        "properties": {
-          "uid": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Uid",
-            "nullable": true
-          },
-          "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name",
-            "nullable": true
-          },
-          "code_submission_value": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Code Submission Value",
-            "nullable": true
-          }
-        },
-        "type": "object",
-        "title": "ParentDataDomain"
-      },
       "PharmaceuticalProduct": {
         "properties": {
           "start_date": {
@@ -162558,11 +163910,13 @@
                 "type": "null"
               }
             ],
-            "title": "Referenced item type"
+            "title": "Type",
+            "description": "Referenced item type"
           },
           "uid": {
             "type": "string",
-            "title": "Referenced item uid"
+            "title": "Uid",
+            "description": "Referenced item uid"
           }
         },
         "type": "object",
@@ -162893,7 +164247,7 @@
           }
         },
         "type": "object",
-        "title": "RegistryIdentifiersMetadata"
+        "title": "RegistryIdentifiersMetadata metadata for study definition"
       },
       "RegistryIdentifiersListingModel": {
         "properties": {
@@ -162961,7 +164315,7 @@
           "esn",
           "ide"
         ],
-        "title": "Registry identifiers model for listing"
+        "title": "Registry identifiers model for listing supplying SDTM generation framework"
       },
       "SimpleActiveSubstance": {
         "properties": {
@@ -163083,6 +164437,30 @@
               }
             ],
             "title": "Definition",
+            "nullable": true
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "nullable": true
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status",
             "nullable": true
           }
         },
@@ -163405,40 +164783,34 @@
             ],
             "title": "Definition",
             "nullable": true
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "nullable": true
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status",
+            "nullable": true
           }
         },
         "type": "object",
         "title": "SimpleActivitySubGroup"
-      },
-      "SimpleCTCodelist": {
-        "properties": {
-          "uid": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Uid",
-            "nullable": true
-          },
-          "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name",
-            "nullable": true
-          }
-        },
-        "type": "object",
-        "title": "SimpleCTCodelist"
       },
       "SimpleCTTermAttributes": {
         "properties": {
@@ -163582,7 +164954,7 @@
           },
           "data_model_ig_name": {
             "type": "string",
-            "title": "The name of the data model ig"
+            "title": "Data Model Ig Name"
           }
         },
         "type": "object",
@@ -163683,16 +165055,19 @@
         "properties": {
           "uid": {
             "type": "string",
-            "title": "StudySoAFootnote.uid"
+            "title": "Uid",
+            "description": "StudySoAFootnote.uid"
           },
           "text_html": {
             "type": "string",
             "format": "html",
-            "title": "HTML text of footnote"
+            "title": "Text Html",
+            "description": "HTML text of footnote"
           },
           "text_plain": {
             "type": "string",
-            "title": "Plain text of footnote"
+            "title": "Text Plain",
+            "description": "Plain text of footnote"
           }
         },
         "type": "object",
@@ -163788,7 +165163,8 @@
                 "type": "null"
               }
             ],
-            "title": "concept id: c code for CDISC CT, dictionary id for dictionary codes",
+            "title": "Id",
+            "description": "concept id: c code for CDISC CT, dictionary id for dictionary codes",
             "nullable": true
           },
           "name": {
@@ -163800,7 +165176,8 @@
                 "type": "null"
               }
             ],
-            "title": "name: submission name for CDISC CT, name for dictionary codes",
+            "title": "Name",
+            "description": "name: submission name for CDISC CT, name for dictionary codes",
             "nullable": true
           }
         },
@@ -164256,6 +165633,20 @@
           "is_adam_param_specific": {
             "type": "boolean",
             "title": "Is Adam Param Specific"
+          },
+          "odm_forms": {
+            "items": {
+              "$ref": "#/components/schemas/CompactOdmForm"
+            },
+            "type": "array",
+            "title": "Odm Forms"
+          },
+          "odm_item_groups": {
+            "items": {
+              "$ref": "#/components/schemas/CompactOdmItemGroup"
+            },
+            "type": "array",
+            "title": "Odm Item Groups"
           },
           "odm_items": {
             "items": {
@@ -165141,33 +166532,6 @@
             "title": "Xml Datatype",
             "nullable": true
           },
-          "xml_codelist": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Xml Codelist",
-            "nullable": true
-          },
-          "xml_codelist_multi": {
-            "anyOf": [
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Xml Codelist Multi",
-            "nullable": true
-          },
           "core": {
             "anyOf": [
               {
@@ -165446,18 +166810,6 @@
             ],
             "title": "Enrich Rule",
             "nullable": true
-          },
-          "xml_codelist_values": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Xml Codelist Values",
-            "nullable": true
           }
         },
         "type": "object",
@@ -165603,18 +166955,7 @@
             ],
             "title": "Xml Datatype"
           },
-          "xml_codelist": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Xml Codelist"
-          },
-          "xml_codelist_multi": {
+          "references_codelists": {
             "anyOf": [
               {
                 "items": {
@@ -165626,7 +166967,21 @@
                 "type": "null"
               }
             ],
-            "title": "Xml Codelist Multi"
+            "title": "References Codelists"
+          },
+          "references_terms": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "References Terms"
           },
           "core": {
             "anyOf": [
@@ -165884,17 +167239,6 @@
               }
             ],
             "title": "Enrich Rule"
-          },
-          "xml_codelist_values": {
-            "anyOf": [
-              {
-                "type": "boolean"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Xml Codelist Values"
           },
           "library_name": {
             "anyOf": [
@@ -166201,8 +167545,8 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
-            "description": "Study version number, if specified, otherwise None.",
+            "title": "Study Version",
+            "description": "Study version number, if specified, otherwise None",
             "nullable": true
           },
           "study_activity_uid": {
@@ -166251,7 +167595,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -166434,6 +167778,11 @@
             ],
             "title": "Activity Subgroup Uid"
           },
+          "keep_old_version": {
+            "type": "boolean",
+            "title": "Keep Old Version",
+            "default": false
+          },
           "activity_uid": {
             "type": "string",
             "title": "Activity Uid"
@@ -166461,7 +167810,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None",
             "nullable": true
           },
@@ -166524,7 +167873,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -166816,15 +168165,43 @@
         "type": "object",
         "title": "StudyActivitySubGroupEditInput"
       },
+      "StudyActivitySyncLatestVersionInput": {
+        "properties": {
+          "activity_group_uid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activity Group Uid"
+          },
+          "activity_subgroup_uid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activity Subgroup Uid"
+          }
+        },
+        "type": "object",
+        "title": "StudyActivitySyncLatestVersionInput"
+      },
       "StudyArmListing": {
         "properties": {
           "STUDYID": {
             "type": "string",
-            "title": "Study Identifier"
+            "title": "Studyid"
           },
           "DOMAIN": {
             "type": "string",
-            "title": "Domain Abbreviation",
+            "title": "Domain",
             "description": "Two-character abbreviation for the domain"
           },
           "ARMCD": {
@@ -166836,7 +168213,7 @@
                 "type": "null"
               }
             ],
-            "title": "Planned Arm Code",
+            "title": "Armcd",
             "description": "\n        1.ARMCD is limited to 20 characters and does not have special character restrictions. \n        The maximum length of ARMCD is longer than for other \"short\" variables to accommodate \n        the kind of values that are likely to be needed for crossover trials. For example, if \n        ARMCD values for a seven- period crossover were constructed using two-character abbreviations \n        for each treatment and separating hyphens, the length of ARMCD values would be 20. 2. If the \n        timing of Visits for a trial does not depend on which ARM a subject is in, then ARMCD should be null.\n        ",
             "nullable": true
           },
@@ -166849,7 +168226,7 @@
                 "type": "null"
               }
             ],
-            "title": "Description of Planned Arm",
+            "title": "Arm",
             "description": "1. Name given to an Arm or Treatment Group. 2. If the timing\n        of Visits for a trial does not depend on which Arm a subject is in, then Arm should be left blank.",
             "nullable": true
           },
@@ -166862,7 +168239,7 @@
                 "type": "null"
               }
             ],
-            "title": "Planned Order of Element within Arm",
+            "title": "Taetord",
             "description": "Number that gives the order of the Element within the Arm",
             "nullable": true
           },
@@ -166875,7 +168252,7 @@
                 "type": "null"
               }
             ],
-            "title": "Element Code",
+            "title": "Etcd",
             "description": "\n        ETCD (the companion to ELEMENT) is limited to 8 characters \n        and does not have special character restrictions. These values should be\n        ",
             "nullable": true
           },
@@ -166888,7 +168265,7 @@
                 "type": "null"
               }
             ],
-            "title": "Description of Element",
+            "title": "Element",
             "description": "The name of the Element. The same Element may occur more than once within an Arm.",
             "nullable": true
           },
@@ -166914,7 +168291,7 @@
                 "type": "null"
               }
             ],
-            "title": "Transition Rule",
+            "title": "Tatrans",
             "description": " If the trial design allows a subject to transition\n        to an Element other than the next Element in sequence, \n        then the conditions for transitioning to those other Elements, \n        and the alternative Element sequences, are specified in this rule (e.g., Responders go to washout). ",
             "nullable": true
           },
@@ -167099,7 +168476,7 @@
           "study_intent",
           "study_intent_nf"
         ],
-        "title": "study attributes model for listing"
+        "title": "Study attributes model for listing supplying SDTM generation framework"
       },
       "StudyBranchArmListingModel": {
         "properties": {
@@ -167360,7 +168737,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -167451,7 +168828,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -167606,17 +168983,17 @@
         "properties": {
           "STUDYID": {
             "type": "string",
-            "title": "Study Identifier"
+            "title": "Studyid"
           },
           "DOMAIN": {
             "type": "string",
-            "title": "Domain Abbreviation",
+            "title": "Domain",
             "description": "Two-character abbreviation for the domain"
           },
           "IETESTCD": {
             "type": "string",
-            "title": "Incl/Excl Criterion Short Name",
-            "description": "\n        Short name IETEST. It can be used as a column name when converting a dataset from a vertical to a horizontal format.\n        The value in IETESTCD cannot be longer than 8 characters, nor can it start with a number (e.g., \"1TEST\"). IETESTCD\n        cannot contain characters other than letters, numbers, or underscores. The prefix \"IE\" is used to ensure consistency\n        with the IE domain.\n        "
+            "title": "Ietestcd",
+            "description": "Incl/Excl Criterion Short Name.\n        Short name IETEST. It can be used as a column name when converting a dataset from a vertical to a horizontal format.\n        The value in IETESTCD cannot be longer than 8 characters, nor can it start with a number (e.g., \"1TEST\"). IETESTCD\n        cannot contain characters other than letters, numbers, or underscores. The prefix \"IE\" is used to ensure consistency\n        with the IE domain.\n        "
           },
           "IETEST": {
             "anyOf": [
@@ -167627,8 +169004,8 @@
                 "type": "null"
               }
             ],
-            "title": "Inclusion/Exclusion Criterion",
-            "description": "\n        Full text of the inclusion or exclusion criterion. The prefix \"IE\" is used to ensure consistency with the IE domain.\n        ",
+            "title": "Ietest",
+            "description": "Full text of the inclusion or exclusion criterion. The prefix IE is used to ensure consistency with the IE domain.",
             "nullable": true
           },
           "IECAT": {
@@ -167640,8 +169017,8 @@
                 "type": "null"
               }
             ],
-            "title": "Inclusion/Exclusion Category",
-            "description": "\n        Used for categorization of the inclusion or exclusion criteria.\n        ",
+            "title": "Iecat",
+            "description": "Used for categorization of the inclusion or exclusion criteria.",
             "nullable": true
           },
           "IESCAT": {
@@ -167653,7 +169030,7 @@
                 "type": "null"
               }
             ],
-            "title": "Inclusion/Exclusion Subcategory",
+            "title": "Iescat",
             "description": "\n        A further categorization of the exception criterion.\n        Can be used to distinguish criteria for a sub-study or for to categorize as\n        a major or minor exceptions. Examples: MAJOR, MINOR.\n        ",
             "nullable": true
           },
@@ -167666,8 +169043,8 @@
                 "type": "null"
               }
             ],
-            "title": "Inclusion/Exclusion Criterion Rule",
-            "description": "\n        Rule that expresses the criterion in computer-executable form (see assumption 4 below).\n        ",
+            "title": "Tirl",
+            "description": "Inclusion/Exclusion Criterion Rule. Rule that expresses the criterion in computer-executable form (see assumption 4 below).",
             "nullable": true
           },
           "TIVERS": {
@@ -167679,8 +169056,8 @@
                 "type": "null"
               }
             ],
-            "title": "Protocol Criteria Versions",
-            "description": "The number of this version of the Inclusion/Exclusion criteria. May be omitted if there is only one version.",
+            "title": "Tivers",
+            "description": "Protocol Criteria Versions. The number of this version of the Inclusion/Exclusion criteria. May be omitted if there is only one version.",
             "nullable": true
           }
         },
@@ -167720,7 +169097,7 @@
           }
         },
         "type": "object",
-        "title": "study_description"
+        "title": "Study description for the study definition"
       },
       "StudyDesignCell": {
         "properties": {
@@ -167738,7 +169115,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None",
             "nullable": true
           },
@@ -167863,7 +169240,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -168321,7 +169698,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -168468,11 +169845,11 @@
         "properties": {
           "STUDYID": {
             "type": "string",
-            "title": "Study Identifier"
+            "title": "Studyid"
           },
           "DOMAIN": {
             "type": "string",
-            "title": "Domain Abbreviation",
+            "title": "Domain",
             "description": "Two-character abbreviation for the domain"
           },
           "MIDSTYPE": {
@@ -168484,8 +169861,8 @@
                 "type": "null"
               }
             ],
-            "title": "Disease Milestone Type",
-            "description": "\n        The type of Disease Milestone. Example: \"HYPOGLYCEMIC EVENT\".\n        ",
+            "title": "Midstype",
+            "description": "The type of Disease Milestone. Example: \"HYPOGLYCEMIC EVENT\".",
             "nullable": true
           },
           "TMDEF": {
@@ -168497,7 +169874,7 @@
                 "type": "null"
               }
             ],
-            "title": "Disease Milestone Definition",
+            "title": "Tmdef",
             "description": "Definition of the Disease Milestone.",
             "nullable": true
           },
@@ -168510,7 +169887,7 @@
                 "type": "null"
               }
             ],
-            "title": "Disease Milestone Repetition Indicator",
+            "title": "Tmrpt",
             "description": "\n        Indicates whether this is a Disease Milestone that can occur only once ('N') \n        or a type of Disease Milestone that can occur multiple times ('Y').\n        ",
             "nullable": true
           }
@@ -168564,7 +169941,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -168651,11 +170028,11 @@
         "properties": {
           "STUDYID": {
             "type": "string",
-            "title": "Study Identifier"
+            "title": "Studyid"
           },
           "DOMAIN": {
             "type": "string",
-            "title": "Domain Abbreviation",
+            "title": "Domain",
             "description": "Two-character abbreviation for the domain"
           },
           "ETCD": {
@@ -168667,8 +170044,8 @@
                 "type": "null"
               }
             ],
-            "title": "Element Code",
-            "description": "\n            ETCD (the companion to ELEMENT) is limited to 8 characters \n            and does not have special character restrictions. These values should be\n            ",
+            "title": "Etcd",
+            "description": "Element Code.\n            ETCD (the companion to ELEMENT) is limited to 8 characters \n            and does not have special character restrictions. These values should be\n            ",
             "nullable": true
           },
           "ELEMENT": {
@@ -168680,7 +170057,7 @@
                 "type": "null"
               }
             ],
-            "title": "Description of Element",
+            "title": "Element",
             "description": "The name of the Element. The same Element may occur more than once within an Arm.",
             "nullable": true
           },
@@ -168693,7 +170070,7 @@
                 "type": "null"
               }
             ],
-            "title": "Rule for Start of Element",
+            "title": "Testrl",
             "description": "Rule for Start of Element Char Rule Expresses rule for beginning Element",
             "nullable": true
           },
@@ -168706,8 +170083,8 @@
                 "type": "null"
               }
             ],
-            "title": "Rule for End of Element",
-            "description": " Rule for End of Element Char Rule Expresses rule for ending Element.\n        Either TEENRL or TEDUR must be present for each Element ",
+            "title": "Teenrl",
+            "description": "Rule for End of Element Char Rule Expresses rule for ending Element. Either TEENRL or TEDUR must be present for each Element",
             "nullable": true
           },
           "TEDUR": {
@@ -168719,7 +170096,7 @@
                 "type": "null"
               }
             ],
-            "title": "Planned Duration of Element",
+            "title": "Tedur",
             "description": "Planned Duration of Element Char ISO 8601\n        Timing Planned Duration of Element in ISO 8601 format. \n        Used when the rule for ending the Element is applied after a fixed duration. \n        ",
             "nullable": true
           }
@@ -168793,7 +170170,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "title": "Type uid",
+            "title": "Type",
             "description": "Element type uid"
           },
           "type_name": {
@@ -168825,7 +170202,7 @@
         "properties": {
           "STUDYID": {
             "type": "string",
-            "title": "Study Identifier"
+            "title": "Studyid"
           },
           "OBJTVLVL": {
             "anyOf": [
@@ -168836,7 +170213,8 @@
                 "type": "null"
               }
             ],
-            "title": "Objective Level",
+            "title": "Objtvlvl",
+            "description": "Objective Level",
             "nullable": true
           },
           "OBJTV": {
@@ -168854,7 +170232,8 @@
                 "type": "null"
               }
             ],
-            "title": "Objective Plain Text",
+            "title": "Objtvpt",
+            "description": "Objective Plain Text",
             "nullable": true
           },
           "ENDPNTLVL": {
@@ -168866,7 +170245,8 @@
                 "type": "null"
               }
             ],
-            "title": "Endpoint Level",
+            "title": "Endpntlvl",
+            "description": "Endpoint Level",
             "nullable": true
           },
           "ENDPNTSL": {
@@ -168878,7 +170258,8 @@
                 "type": "null"
               }
             ],
-            "title": "Endpoint Sub-level",
+            "title": "Endpntsl",
+            "description": "Endpoint Sub-level",
             "nullable": true
           },
           "ENDPNT": {
@@ -168890,7 +170271,8 @@
                 "type": "null"
               }
             ],
-            "title": "Endpoint Plain",
+            "title": "Endpnt",
+            "description": "Endpoint Plain",
             "nullable": true
           },
           "ENDPNTPT": {
@@ -168902,7 +170284,8 @@
                 "type": "null"
               }
             ],
-            "title": "Endpoint Plain Text",
+            "title": "Endpntpt",
+            "description": "Endpoint Plain Text",
             "nullable": true
           },
           "UNITDEF": {
@@ -168914,7 +170297,8 @@
                 "type": "null"
               }
             ],
-            "title": "Unit Definition",
+            "title": "Unitdef",
+            "description": "Unit Definition",
             "nullable": true
           },
           "UNIT": {
@@ -168938,7 +170322,8 @@
                 "type": "null"
               }
             ],
-            "title": "Time Frame",
+            "title": "Tmfrm",
+            "description": "Time Frame",
             "nullable": true
           },
           "TMFRMPT": {
@@ -168950,7 +170335,8 @@
                 "type": "null"
               }
             ],
-            "title": "Time Frame Plain Text",
+            "title": "Tmfrmpt",
+            "description": "Time Frame Plain Text",
             "nullable": true
           },
           "RACT": {
@@ -168965,8 +170351,8 @@
                 "type": "null"
               }
             ],
-            "title": "Related Activities",
-            "description": "Array list for all related Activity Group as Template Parameter in either Objective or Endpoint",
+            "title": "Ract",
+            "description": "Array list for all related Activities as Template Parameter in either Objective or Endpoint",
             "nullable": true
           },
           "RACTSGRP": {
@@ -168981,8 +170367,8 @@
                 "type": "null"
               }
             ],
-            "title": "Related Activity Subroups",
-            "description": "Array list for all related Activity Subgroup as Template Parameter in either Objective or Endpoint",
+            "title": "Ractsgrp",
+            "description": "Array list for all related Activity Subgroups as Template Parameter in either Objective or Endpoint",
             "nullable": true
           },
           "RACTGRP": {
@@ -168997,8 +170383,8 @@
                 "type": "null"
               }
             ],
-            "title": "Related Activity Groups",
-            "description": "Array list for all related Activity Group as Template Parameter in either Objective or Endpoint",
+            "title": "Ractgrp",
+            "description": "Array list for all related Activity Groups as Template Parameter in either Objective or Endpoint",
             "nullable": true
           },
           "RACTINST": {
@@ -169013,7 +170399,7 @@
                 "type": "null"
               }
             ],
-            "title": "Related Activity Instances",
+            "title": "Ractinst",
             "description": "Array list for all related Activity Instances as Template Parameter in either Objective or Endpoint",
             "nullable": true
           }
@@ -169224,21 +170610,21 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
           "epoch_ctterm": {
             "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag",
-            "title": "Study epoch Term"
+            "description": "Study epoch Term"
           },
           "epoch_subtype_ctterm": {
             "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag",
-            "title": "Study Epoch subtype Term"
+            "description": "Study Epoch subtype Term"
           },
           "epoch_type_ctterm": {
             "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag",
-            "title": "Study Epoch type CTTermName"
+            "description": "Study Epoch type CTTermName"
           },
           "start_day": {
             "anyOf": [
@@ -169249,7 +170635,8 @@
                 "type": "null"
               }
             ],
-            "title": "Study Epoch start day",
+            "title": "Start Day",
+            "description": "Study Epoch start day",
             "nullable": true
           },
           "end_day": {
@@ -169261,7 +170648,8 @@
                 "type": "null"
               }
             ],
-            "title": "Study Epoch end day",
+            "title": "End Day",
+            "description": "Study Epoch end day",
             "nullable": true
           },
           "start_week": {
@@ -169273,7 +170661,8 @@
                 "type": "null"
               }
             ],
-            "title": "Study Epoch start week",
+            "title": "Start Week",
+            "description": "Study Epoch start week",
             "nullable": true
           },
           "end_week": {
@@ -169285,7 +170674,8 @@
                 "type": "null"
               }
             ],
-            "title": "Study Epoch end week",
+            "title": "End Week",
+            "description": "Study Epoch end week",
             "nullable": true
           },
           "start_date": {
@@ -169865,21 +171255,21 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
           "epoch_ctterm": {
             "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag",
-            "title": "Study epoch Term"
+            "description": "Study epoch Term"
           },
           "epoch_subtype_ctterm": {
             "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag",
-            "title": "Study Epoch subtype Term"
+            "description": "Study Epoch subtype Term"
           },
           "epoch_type_ctterm": {
             "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag",
-            "title": "Study Epoch type CTTermName"
+            "description": "Study Epoch type CTTermName"
           },
           "start_day": {
             "anyOf": [
@@ -169890,7 +171280,8 @@
                 "type": "null"
               }
             ],
-            "title": "Study Epoch start day",
+            "title": "Start Day",
+            "description": "Study Epoch start day",
             "nullable": true
           },
           "end_day": {
@@ -169902,7 +171293,8 @@
                 "type": "null"
               }
             ],
-            "title": "Study Epoch end day",
+            "title": "End Day",
+            "description": "Study Epoch end day",
             "nullable": true
           },
           "start_week": {
@@ -169914,7 +171306,8 @@
                 "type": "null"
               }
             ],
-            "title": "Study Epoch start week",
+            "title": "Start Week",
+            "description": "Study Epoch start week",
             "nullable": true
           },
           "end_week": {
@@ -169926,7 +171319,8 @@
                 "type": "null"
               }
             ],
-            "title": "Study Epoch end week",
+            "title": "End Week",
+            "description": "Study Epoch end week",
             "nullable": true
           },
           "start_date": {
@@ -170269,7 +171663,7 @@
           }
         },
         "type": "object",
-        "title": "StudyIdentificationMetadata"
+        "title": "Identification metadata for study definition"
       },
       "StudyIdentificationMetadataJsonModel-Output": {
         "properties": {
@@ -170394,7 +171788,7 @@
           }
         },
         "type": "object",
-        "title": "StudyIdentificationMetadata"
+        "title": "Identification metadata for study definition"
       },
       "StudyInterventionJsonModel-Input": {
         "properties": {
@@ -170605,7 +171999,7 @@
           }
         },
         "type": "object",
-        "title": "study_intervention"
+        "title": "Study interventions parameters for study definition"
       },
       "StudyInterventionJsonModel-Output": {
         "properties": {
@@ -170816,7 +172210,7 @@
           }
         },
         "type": "object",
-        "title": "study_intervention"
+        "title": "Study interventions parameters for study definition"
       },
       "StudyMetadataJsonModel-Input": {
         "properties": {
@@ -170888,7 +172282,7 @@
           }
         },
         "type": "object",
-        "title": "StudyMetadata"
+        "title": "Study Metadata"
       },
       "StudyMetadataJsonModel-Output": {
         "properties": {
@@ -170960,7 +172354,7 @@
           }
         },
         "type": "object",
-        "title": "StudyMetadata"
+        "title": "Study Metadata"
       },
       "StudyMetadataListingModel": {
         "properties": {
@@ -171193,6 +172587,45 @@
           "title"
         ],
         "title": "Study Metadata model for listing"
+      },
+      "StudyMinimal": {
+        "properties": {
+          "uid": {
+            "type": "string",
+            "title": "Uid",
+            "description": "UID of the study, e.g. 'Study_000001'"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "ID of the study, e.g. 'NN1234-56789'",
+            "nullable": true
+          },
+          "acronym": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acronym",
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "uid"
+        ],
+        "title": "StudyMinimal"
       },
       "StudyObjectiveListingModel": {
         "properties": {
@@ -171890,7 +173323,7 @@
           }
         },
         "type": "object",
-        "title": "study_population"
+        "title": "Study population parameters for study definition"
       },
       "StudyPopulationJsonModel-Output": {
         "properties": {
@@ -172223,7 +173656,7 @@
           }
         },
         "type": "object",
-        "title": "study_population"
+        "title": "Study population parameters for study definition"
       },
       "StudyPopulationListingModel": {
         "properties": {
@@ -172387,7 +173820,7 @@
           "relapse_criteria_nf",
           "plan_no_subject_nf"
         ],
-        "title": "Study population model for listing"
+        "title": "Study population model for listing supplying SDTM generation framework"
       },
       "StudyPreferredTimeUnit": {
         "properties": {
@@ -172555,7 +173988,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -172635,6 +174068,12 @@
             "description": "show soa group in protocol flow chart",
             "default": false
           },
+          "keep_old_version": {
+            "type": "boolean",
+            "title": "Keep Old Version",
+            "description": "Boolean indicating that someone has not updated to lates version of Activity but reviewed the changes ",
+            "default": false
+          },
           "study_activity_uid": {
             "anyOf": [
               {
@@ -172706,7 +174145,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -172814,10 +174253,10 @@
           "content": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/StudySelectionActivityCreateInput"
+                "$ref": "#/components/schemas/StudySelectionActivityBatchUpdateInput"
               },
               {
-                "$ref": "#/components/schemas/StudySelectionActivityBatchUpdateInput"
+                "$ref": "#/components/schemas/StudySelectionActivityCreateInput"
               },
               {
                 "$ref": "#/components/schemas/StudySelectionActivityBatchDeleteInput"
@@ -172904,7 +174343,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -172984,6 +174423,12 @@
             "description": "show soa group in protocol flow chart",
             "default": false
           },
+          "keep_old_version": {
+            "type": "boolean",
+            "title": "Keep Old Version",
+            "description": "Boolean indicating that someone has not updated to lates version of Activity but reviewed the changes ",
+            "default": false
+          },
           "study_activity_uid": {
             "anyOf": [
               {
@@ -173055,7 +174500,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -173271,6 +174716,11 @@
               }
             ],
             "title": "Activity Subgroup Uid"
+          },
+          "keep_old_version": {
+            "type": "boolean",
+            "title": "Keep Old Version",
+            "default": false
           }
         },
         "type": "object",
@@ -173331,7 +174781,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -173372,7 +174822,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -173677,6 +175127,11 @@
             ],
             "title": "Activity Subgroup Uid"
           },
+          "keep_old_version": {
+            "type": "boolean",
+            "title": "Keep Old Version",
+            "default": false
+          },
           "activity_uid": {
             "anyOf": [
               {
@@ -173760,7 +175215,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -173918,7 +175373,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -174247,7 +175702,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -174405,7 +175860,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -174506,7 +175961,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -174664,7 +176119,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -174773,7 +176228,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -174919,7 +176374,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -175253,7 +176708,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -175399,7 +176854,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -175506,7 +176961,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -175652,7 +177107,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -175745,7 +177200,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -175879,7 +177334,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -176253,7 +177708,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -176387,7 +177842,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -176523,7 +177978,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -176719,7 +178174,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -176936,7 +178391,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -177042,7 +178497,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -177170,7 +178625,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -177276,7 +178731,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -177467,7 +178922,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -177671,7 +179126,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -178020,7 +179475,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -178224,7 +179679,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -178327,7 +179782,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -178505,7 +179960,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -178807,7 +180262,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -178914,7 +180369,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -179030,7 +180485,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -179137,7 +180592,7 @@
                 "type": "null"
               }
             ],
-            "title": "author_username",
+            "title": "Author Username",
             "description": "Version author",
             "nullable": true
           },
@@ -179296,6 +180751,135 @@
         ],
         "title": "StudySelectionObjectiveTemplateSelectInput"
       },
+      "StudySimple": {
+        "properties": {
+          "uid": {
+            "type": "string",
+            "title": "Uid",
+            "description": "UID of the study, e.g. 'Study_000001'"
+          },
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id",
+            "description": "ID of the study, e.g. 'NN1234-56789'",
+            "nullable": true
+          },
+          "acronym": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Acronym",
+            "nullable": true
+          },
+          "number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Number",
+            "nullable": true
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title",
+            "nullable": true
+          },
+          "subpart_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subpart Id",
+            "nullable": true
+          },
+          "subpart_acronym": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subpart Acronym",
+            "nullable": true
+          },
+          "clinical_programme_name": {
+            "type": "string",
+            "title": "Clinical Programme Name"
+          },
+          "project_number": {
+            "type": "string",
+            "title": "Project Number"
+          },
+          "project_name": {
+            "type": "string",
+            "title": "Project Name"
+          },
+          "version_author": {
+            "type": "string",
+            "title": "Version Author"
+          },
+          "version_status": {
+            "$ref": "#/components/schemas/StudyStatus"
+          },
+          "version_start_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Version Start Date"
+          },
+          "version_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Number",
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "uid",
+          "clinical_programme_name",
+          "project_number",
+          "project_name",
+          "version_author",
+          "version_status",
+          "version_start_date"
+        ],
+        "title": "StudySimple"
+      },
       "StudySoAEditBatchInput": {
         "properties": {
           "method": {
@@ -179390,7 +180974,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -179523,7 +181107,8 @@
                 "type": "null"
               }
             ],
-            "title": "The list of items referenced by a single footnote"
+            "title": "Referenced Items",
+            "description": "The list of items referenced by a single footnote"
           },
           "study_soa_footnote_uid": {
             "type": "string",
@@ -179576,7 +181161,8 @@
               "$ref": "#/components/schemas/ReferencedItem"
             },
             "type": "array",
-            "title": "The list of items referenced by a single footnote"
+            "title": "Referenced Items",
+            "description": "The list of items referenced by a single footnote"
           }
         },
         "type": "object",
@@ -179614,7 +181200,8 @@
               "$ref": "#/components/schemas/ReferencedItem"
             },
             "type": "array",
-            "title": "The list of items referenced by a single footnote"
+            "title": "Referenced Items",
+            "description": "The list of items referenced by a single footnote"
           }
         },
         "type": "object",
@@ -179656,7 +181243,8 @@
                 "type": "null"
               }
             ],
-            "title": "The list of items referenced by a single footnote"
+            "title": "Referenced Items",
+            "description": "The list of items referenced by a single footnote"
           }
         },
         "type": "object",
@@ -179681,7 +181269,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -179890,6 +181478,7 @@
         },
         "type": "object",
         "required": [
+          "study_uid",
           "soa_group_term_uid"
         ],
         "title": "StudySoAGroup"
@@ -179922,7 +181511,7 @@
           },
           "baseline_as_time_zero": {
             "type": "boolean",
-            "title": "Baseline shown as time 0",
+            "title": "Baseline As Time Zero",
             "description": "Show the baseline visit as time 0 in all SoA layouts",
             "default": false
           },
@@ -179954,7 +181543,7 @@
           },
           "baseline_as_time_zero": {
             "type": "boolean",
-            "title": "Baseline shown as time 0",
+            "title": "Baseline As Time Zero",
             "description": "Show the baseline visit as time 0 in all SoA layouts",
             "default": false
           }
@@ -179983,7 +181572,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -179996,7 +181585,6 @@
                 "type": "null"
               }
             ],
-            "description": "CtPackage",
             "nullable": true
           },
           "description": {
@@ -180158,7 +181746,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -180171,7 +181759,6 @@
                 "type": "null"
               }
             ],
-            "description": "CtPackage",
             "nullable": true
           },
           "description": {
@@ -180285,31 +181872,38 @@
           },
           "arms": {
             "type": "integer",
-            "title": "Number of Study Arms"
+            "title": "Arms",
+            "description": "Number of Study Arms"
           },
           "pre_treatment_epochs": {
             "type": "integer",
-            "title": "Number of Study Pre Treatment Epochs"
+            "title": "Pre Treatment Epochs",
+            "description": "Number of Study Pre Treatment Epochs"
           },
           "treatment_epochs": {
             "type": "integer",
-            "title": "Number of Treatment Epochs"
+            "title": "Treatment Epochs",
+            "description": "Number of Treatment Epochs"
           },
           "no_treatment_epochs": {
             "type": "integer",
-            "title": "Number of No Treatment Epochs"
+            "title": "No Treatment Epochs",
+            "description": "Number of No Treatment Epochs"
           },
           "post_treatment_epochs": {
             "type": "integer",
-            "title": "Number of Post Treatment Epochs"
+            "title": "Post Treatment Epochs",
+            "description": "Number of Post Treatment Epochs"
           },
           "treatment_elements": {
             "type": "integer",
-            "title": "Number of Treatment Elements"
+            "title": "Treatment Elements",
+            "description": "Number of Treatment Elements"
           },
           "no_treatment_elements": {
             "type": "integer",
-            "title": "Number of No Treatment Elements"
+            "title": "No Treatment Elements",
+            "description": "Number of No Treatment Elements"
           },
           "cohorts_in_study": {
             "type": "string",
@@ -180550,11 +182144,11 @@
         "properties": {
           "STUDYID": {
             "type": "string",
-            "title": "Study Identifier"
+            "title": "Studyid"
           },
           "DOMAIN": {
             "type": "string",
-            "title": "Domain Abbreviation",
+            "title": "Domain",
             "description": "Two-character abbreviation for the domain"
           },
           "TSPARMCD": {
@@ -180566,8 +182160,8 @@
                 "type": "null"
               }
             ],
-            "title": "Trial Summary Parameter Short Name",
-            "description": "\n        TSPARMCD (the companion to TSPARM) is limited to 8 characters and does not have special character restrictions.\n        These values should be short for ease of use in programming, but it is not expected that TSPARMCD will need to\n        serve as variable names. Examples: AGEMIN, AGEMAX\n        ",
+            "title": "Tsparmcd",
+            "description": "\"Trial Summary Parameter Short Name\".\n        TSPARMCD (the companion to TSPARM) is limited to 8 characters and does not have special character restrictions.\n        These values should be short for ease of use in programming, but it is not expected that TSPARMCD will need to\n        serve as variable names. Examples: AGEMIN, AGEMAX\n        ",
             "nullable": true
           },
           "TSPARM": {
@@ -180579,7 +182173,7 @@
                 "type": "null"
               }
             ],
-            "title": "Trial Summary Parameter",
+            "title": "Tsparm",
             "description": "\n        Term for the Trial Summary Parameter. The value in TSPARM cannot be longer than 40 characters.\n        Examples Planned Minimum Age of Subjects, Planned Maximum Age of Subjects\n        ",
             "nullable": true
           },
@@ -180596,7 +182190,7 @@
                 "type": "null"
               }
             ],
-            "title": "Parameter Value",
+            "title": "Tsval",
             "description": "\n        Value of TSPARM. Example: \"ASTHMA\" when TSPARM value is \"Trial Indication\".\n        TSVAL can only be null when TSVALNF is populated. Text over 200 characters can be added to additional columns TSVAL1-TSVALn.\n        ",
             "nullable": true
           },
@@ -180609,8 +182203,8 @@
                 "type": "null"
               }
             ],
-            "title": "Parameter Null Flavor",
-            "description": "\n        Null flavor for the value of TSPARM, to be populated if and only if TSVAL is null.\n        ",
+            "title": "Tsvalnf",
+            "description": "Null flavor for the value of TSPARM, to be populated if and only if TSVAL is null.",
             "nullable": true
           },
           "TSVALCD": {
@@ -180622,7 +182216,7 @@
                 "type": "null"
               }
             ],
-            "title": "Parameter Value Code",
+            "title": "Tsvalcd",
             "description": "\n        This is the code of the term in TSVAL. For example; 6CW7F3G59X is the code for Gabapentin,\n        C49488 is the code for Y. The length of this variable can be longer than 8 to accommodate\n        the length of the external terminology.\n        ",
             "nullable": true
           },
@@ -180635,7 +182229,7 @@
                 "type": "null"
               }
             ],
-            "title": "Name of the Reference Terminology",
+            "title": "Tsvcdref",
             "description": "The name of the Reference Terminology from which TSVALCD is taken. For example; CDISC, SNOMED, ISO 8601.",
             "nullable": true
           },
@@ -180648,7 +182242,7 @@
                 "type": "null"
               }
             ],
-            "title": "Version of the Reference Terminology",
+            "title": "Tsvcdver",
             "description": "The version number of the Reference Terminology, if applicable.",
             "nullable": true
           }
@@ -180749,7 +182343,7 @@
           "post_auth",
           "post_auth_nf"
         ],
-        "title": "Study type model for listing"
+        "title": "Study type model for listing supplying SDTM generation framework"
       },
       "StudyVersionMetadataJsonModel-Input": {
         "properties": {
@@ -180819,7 +182413,7 @@
           }
         },
         "type": "object",
-        "title": "StudyVersionMetadata"
+        "title": "Version metadata for study definition"
       },
       "StudyVersionMetadataJsonModel-Output": {
         "properties": {
@@ -180886,7 +182480,7 @@
           }
         },
         "type": "object",
-        "title": "StudyVersionMetadata"
+        "title": "Version metadata for study definition"
       },
       "StudyVisit": {
         "properties": {
@@ -181031,7 +182625,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -181486,16 +183080,17 @@
         "properties": {
           "STUDYID": {
             "type": "string",
-            "title": "Study Identifier",
+            "title": "Studyid",
             "description": "Unique identifier for a study."
           },
           "VISTPCD": {
             "type": "string",
-            "title": "Visit Type Code"
+            "title": "Vistpcd",
+            "description": "Visit Type Code"
           },
           "AVISITN": {
             "type": "integer",
-            "title": "Visit Number",
+            "title": "Avisitn",
             "description": "1. Clinical encounter number 2. Numeric version of VISIT, used for sorting."
           },
           "AVISIT": {
@@ -181507,8 +183102,8 @@
                 "type": "null"
               }
             ],
-            "title": "Visit Name",
-            "description": "1. Protocol-defined description of clinical encounter. 2. May\n        be used in addition to VISITNUM and/or VISITDY as a text description of the clinical encounter.",
+            "title": "Avisit",
+            "description": "Visit Name. 1. Protocol-defined description of clinical encounter. 2. May\n        be used in addition to VISITNUM and/or VISITDY as a text description of the clinical encounter.",
             "nullable": true
           },
           "AVISIT1N": {
@@ -181520,7 +183115,7 @@
                 "type": "null"
               }
             ],
-            "title": "Planned Study Day of Visit",
+            "title": "Avisit1N",
             "description": "1. Planned study day of VISIT. 2. Due to its sequential nature, used for sorting.",
             "nullable": true
           },
@@ -181533,7 +183128,8 @@
                 "type": "null"
               }
             ],
-            "title": "Visit Label",
+            "title": "Vislabel",
+            "description": "Visit Label",
             "nullable": true
           },
           "AVISIT1": {
@@ -181545,7 +183141,8 @@
                 "type": "null"
               }
             ],
-            "title": "Planned day",
+            "title": "Avisit1",
+            "description": "Planned day",
             "nullable": true
           },
           "AVISIT2": {
@@ -181557,7 +183154,8 @@
                 "type": "null"
               }
             ],
-            "title": "Planned Week Text",
+            "title": "Avisit2",
+            "description": "Planned Week Text",
             "nullable": true
           },
           "AVISIT2N": {
@@ -181569,7 +183167,8 @@
                 "type": "null"
               }
             ],
-            "title": "Planned Week Number",
+            "title": "Avisit2N",
+            "description": "Planned Week Number",
             "nullable": true
           }
         },
@@ -181637,17 +183236,6 @@
               }
             ],
             "title": "Visit Sublabel Reference"
-          },
-          "consecutive_visit_group": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Consecutive Visit Group"
           },
           "show_visit": {
             "type": "boolean",
@@ -181898,17 +183486,6 @@
             ],
             "title": "Visit Sublabel Reference"
           },
-          "consecutive_visit_group": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Consecutive Visit Group"
-          },
           "show_visit": {
             "type": "boolean",
             "title": "Show Visit"
@@ -182102,16 +183679,16 @@
         "properties": {
           "STUDYID": {
             "type": "string",
-            "title": "Study Identifier"
+            "title": "Studyid"
           },
           "DOMAIN": {
             "type": "string",
-            "title": "Domain Abbreviation",
+            "title": "Domain",
             "description": "Two-character abbreviation for the domain"
           },
           "VISITNUM": {
             "type": "integer",
-            "title": "Visit Number",
+            "title": "Visitnum",
             "description": "1. Clinical encounter number 2. Numeric version of VISIT, used for sorting."
           },
           "VISIT": {
@@ -182123,7 +183700,7 @@
                 "type": "null"
               }
             ],
-            "title": "Visit Name",
+            "title": "Visit",
             "description": "1. Protocol-defined description of clinical encounter. 2. May\n        be used in addition to VISITNUM and/or VISITDY as a text description of the clinical encounter.",
             "nullable": true
           },
@@ -182136,7 +183713,7 @@
                 "type": "null"
               }
             ],
-            "title": "Planned Study Day of Visit",
+            "title": "Visitdy",
             "description": "1. Planned study day of VISIT. 2. Due to its sequential nature, used for sorting.",
             "nullable": true
           },
@@ -182149,7 +183726,7 @@
                 "type": "null"
               }
             ],
-            "title": "Planned Arm Code",
+            "title": "Armcd",
             "description": "\n        1.ARMCD is limited to 20 characters and does not have special character restrictions. \n        The maximum length of ARMCD is longer than for other \"short\" variables to accommodate \n        the kind of values that are likely to be needed for crossover trials. For example, if \n        ARMCD values for a seven- period crossover were constructed using two-character abbreviations \n        for each treatment and separating hyphens, the length of ARMCD values would be 20. 2. If the \n        timing of Visits for a trial does not depend on which ARM a subject is in, then ARMCD should be null.\n        ",
             "nullable": true
           },
@@ -182162,7 +183739,7 @@
                 "type": "null"
               }
             ],
-            "title": "Description of Planned Arm",
+            "title": "Arm",
             "description": "1. Name given to an Arm or Treatment Group. 2. If the timing\n        of Visits for a trial does not depend on which Arm a subject is in, then Arm should be left blank.",
             "nullable": true
           },
@@ -182175,7 +183752,7 @@
                 "type": "null"
               }
             ],
-            "title": "Visit Start Rule",
+            "title": "Tvstrl",
             "description": "Rule describing when the Visit starts, in relation to the sequence of Elements.",
             "nullable": true
           },
@@ -182188,7 +183765,7 @@
                 "type": "null"
               }
             ],
-            "title": "Visit End Rule",
+            "title": "Tvenrl",
             "description": "Rule describing when the Visit ends, in relation to the sequence of Elements.",
             "nullable": true
           }
@@ -182448,7 +184025,7 @@
                 "type": "null"
               }
             ],
-            "title": "study version or date information",
+            "title": "Study Version",
             "description": "Study version number, if specified, otherwise None.",
             "nullable": true
           },
@@ -182907,16 +184484,76 @@
         ],
         "title": "StudyVisitVersion"
       },
+      "SystemInformation": {
+        "properties": {
+          "api_version": {
+            "type": "string",
+            "title": "Api Version",
+            "description": "Version of the API specification"
+          },
+          "db_version": {
+            "type": "string",
+            "title": "Db Version",
+            "description": "Version information from the Neo4j database the application is using"
+          },
+          "db_name": {
+            "type": "string",
+            "title": "Db Name",
+            "description": "Name of the database the application is using"
+          },
+          "build_id": {
+            "type": "string",
+            "title": "Build Id",
+            "description": "The Build.BuildNumber identifier from the pipeline run"
+          },
+          "commit_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Commit Id",
+            "description": "The reference to the repository state: the id of the last commit to the branch at build",
+            "nullable": true
+          },
+          "branch_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Branch Name",
+            "description": "Name of the VCS repository branch the app was built from",
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "api_version",
+          "db_version",
+          "db_name",
+          "build_id"
+        ],
+        "title": "SystemInformation"
+      },
       "TableCell": {
         "properties": {
           "text": {
             "type": "string",
-            "title": "Text contents of cell",
+            "title": "Text",
+            "description": "Text contents of cell",
             "default": ""
           },
           "span": {
             "type": "integer",
-            "title": "Horizontal spanning of cell, 1 by default",
+            "title": "Span",
+            "description": "Horizontal spanning of cell, 1 by default",
             "default": 1
           },
           "style": {
@@ -182928,7 +184565,8 @@
                 "type": "null"
               }
             ],
-            "title": "Associated style to cell",
+            "title": "Style",
+            "description": "Associated style to cell",
             "nullable": true
           },
           "refs": {
@@ -182943,7 +184581,8 @@
                 "type": "null"
               }
             ],
-            "title": "Reference to item",
+            "title": "Refs",
+            "description": "Reference to item",
             "nullable": true
           },
           "footnotes": {
@@ -182958,7 +184597,8 @@
                 "type": "null"
               }
             ],
-            "title": "Referenced footnotes",
+            "title": "Footnotes",
+            "description": "Referenced footnotes",
             "nullable": true
           },
           "vertical": {
@@ -182970,7 +184610,8 @@
                 "type": "null"
               }
             ],
-            "title": "Text text direction",
+            "title": "Vertical",
+            "description": "Text text direction",
             "nullable": true
           }
         },
@@ -182984,11 +184625,13 @@
               "$ref": "#/components/schemas/TableCell"
             },
             "type": "array",
-            "title": "Table cells in the row"
+            "title": "Cells",
+            "description": "Table cells in the row"
           },
           "hide": {
             "type": "boolean",
-            "title": "Hide row from display",
+            "title": "Hide",
+            "description": "Hide row from display",
             "default": false
           },
           "order": {
@@ -183000,7 +184643,8 @@
                 "type": "null"
               }
             ],
-            "title": "Order of a given row inside its parents"
+            "title": "Order",
+            "description": "Order of a given row inside its parents"
           },
           "level": {
             "anyOf": [
@@ -183011,7 +184655,8 @@
                 "type": "null"
               }
             ],
-            "title": "Integer that represents SoAItem associated with given row"
+            "title": "Level",
+            "description": "Integer that represents SoAItem associated with given row"
           }
         },
         "type": "object",
@@ -183024,7 +184669,8 @@
               "$ref": "#/components/schemas/TableRow"
             },
             "type": "array",
-            "title": "List of table rows"
+            "title": "Rows",
+            "description": "List of table rows"
           },
           "footnotes": {
             "anyOf": [
@@ -183038,17 +184684,20 @@
                 "type": "null"
               }
             ],
-            "title": "Mapping of symbols and table footnotes",
+            "title": "Footnotes",
+            "description": "Mapping of symbols and table footnotes",
             "nullable": true
           },
           "num_header_rows": {
             "type": "integer",
-            "title": "Number of header rows",
+            "title": "Num Header Rows",
+            "description": "Number of header rows",
             "default": 0
           },
           "num_header_cols": {
             "type": "integer",
-            "title": "Number of header columns",
+            "title": "Num Header Cols",
+            "description": "Number of header columns",
             "default": 0
           },
           "title": {
@@ -183060,7 +184709,8 @@
                 "type": "null"
               }
             ],
-            "title": "Table title (when rendered to HTML)",
+            "title": "Title",
+            "description": "Table title (when rendered to HTML)",
             "nullable": true
           },
           "id": {
@@ -183072,7 +184722,8 @@
                 "type": "null"
               }
             ],
-            "title": "Table id (when rendered to HTML)",
+            "title": "Id",
+            "description": "Table id (when rendered to HTML)",
             "nullable": true
           }
         },
@@ -184896,7 +186547,8 @@
                 "type": "null"
               }
             ],
-            "title": "Label",
+            "title": "Lb",
+            "description": "Label",
             "nullable": true
           },
           "topic_cd": {
@@ -184908,7 +186560,8 @@
                 "type": "null"
               }
             ],
-            "title": "Topic Code",
+            "title": "Topic Cd",
+            "description": "Topic Code",
             "nullable": true
           },
           "short_topic_cd": {
@@ -184920,7 +186573,8 @@
                 "type": "null"
               }
             ],
-            "title": "Short Topic Code",
+            "title": "Short Topic Cd",
+            "description": "Short Topic Code",
             "nullable": true
           },
           "description": {
@@ -186099,6 +187753,11 @@
             "title": "Visits To Assign",
             "description": "List of visits to be assigned to the consecutive_visit_group"
           },
+          "format": {
+            "$ref": "#/components/schemas/VisitGroupFormat",
+            "description": "The way how the Visits should be groupped. The possible values are: range or list.\n                           The range technique will name the group in the following way (V4-V6),\n                           the list technique will generate the group name in the following way (V4,V5,V6)",
+            "default": "range"
+          },
           "overwrite_visit_from_template": {
             "anyOf": [
               {
@@ -186117,6 +187776,14 @@
           "visits_to_assign"
         ],
         "title": "VisitConsecutiveGroupInput"
+      },
+      "VisitGroupFormat": {
+        "type": "string",
+        "enum": [
+          "range",
+          "list"
+        ],
+        "title": "VisitGroupFormat"
       },
       "VisitName": {
         "properties": {
@@ -186358,36 +188025,6 @@
             ],
             "title": "Name",
             "nullable": true
-          },
-          "activity_item_classes": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/ParentActivityItemClass"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Activity Item Classes",
-            "nullable": true
-          },
-          "data_domains": {
-            "anyOf": [
-              {
-                "items": {
-                  "$ref": "#/components/schemas/ParentDataDomain"
-                },
-                "type": "array"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Data Domains",
-            "nullable": true
           }
         },
         "type": "object",
@@ -186446,36 +188083,6 @@
         },
         "type": "object",
         "title": "CompactActivityItemClass"
-      },
-      "clinical_mdr_api__models__biomedical_concepts__activity_instance_class__SimpleDatasetClass": {
-        "properties": {
-          "uid": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Uid",
-            "nullable": true
-          },
-          "title": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Title",
-            "nullable": true
-          }
-        },
-        "type": "object",
-        "title": "SimpleDatasetClass"
       },
       "clinical_mdr_api__models__biomedical_concepts__activity_item_class__CompactActivityInstanceClass": {
         "properties": {
@@ -186849,10 +188456,17 @@
             "title": "Library Name"
           },
           "possible_actions": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Possible Actions",
             "description": "Holds those actions that can be performed on the ActivityInstances. Actions are: 'approve', 'edit', 'new_version'."
           }
@@ -187206,7 +188820,7 @@
                 "type": "null"
               }
             ],
-            "title": "The uid of the referenced codelist",
+            "title": "Uid",
             "nullable": true
           },
           "name": {
@@ -187218,7 +188832,7 @@
                 "type": "null"
               }
             ],
-            "title": "The name of the referenced codelist",
+            "title": "Name",
             "nullable": true
           }
         },
@@ -187262,7 +188876,7 @@
         "flows": {
           "authorizationCode": {
             "scopes": {
-              "api://None/API.call": "Make calls to the API"
+              "api:///API.call": "Make calls to the API"
             },
             "authorizationUrl": "",
             "tokenUrl": ""
