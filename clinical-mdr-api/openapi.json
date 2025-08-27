@@ -3,7 +3,7 @@
   "info": {
     "title": "StudyBuilder API",
     "description": "\n## NOTICE\n\nThis license information is applicable to the swagger documentation of the clinical-mdr-api, that is the openapi.json.\n\n## License Terms (MIT)\n\nCopyright (C) 2025 Novo Nordisk A/S, Danish company registration no. 24256790\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n## Licenses and Acknowledgements for Incorporated Software\n\nThis component contains software licensed under different licenses when compiled, please refer to the third-party-licenses.md file for further information and full license texts.\n\n## Authentication\n\nSupports OAuth2 [Authorization Code Flow](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1),\nat paths described in the OpenID Connect Discovery metadata document (whose URL is defined by the `OAUTH_METADATA_URL` environment variable).\n\nMicrosoft Identity Platform documentation can be read \n([here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)).\n\nAuthentication can be turned off with `OAUTH_ENABLED=false` environment variable. \n\nWhen authentication is turned on, all requests to protected API endpoints must provide a valid bearer (JWT) token inside the `Authorization` http header. \n",
-    "version": "3.0.417"
+    "version": "3.0.440"
   },
   "paths": {
     "/": {
@@ -44647,7 +44647,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ComplexTemplateParameter"
+                    "$ref": "#/components/schemas/TemplateParameter"
                   },
                   "title": "Response Get Parameters Timeframe Templates  Timeframe Template Uid  Parameters Get"
                 }
@@ -46372,7 +46372,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ComplexTemplateParameter"
+                    "$ref": "#/components/schemas/TemplateParameter"
                   },
                   "title": "Response Get Parameters Timeframes  Timeframe Uid  Parameters Get"
                 }
@@ -56952,6 +56952,27 @@
             }
           },
           {
+            "name": "names[]",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A list of activity instance names to use as a specific filter",
+              "title": "Names[]"
+            },
+            "description": "A list of activity instance names to use as a specific filter"
+          },
+          {
             "name": "activity_names[]",
             "in": "query",
             "required": false,
@@ -61284,6 +61305,25 @@
               "title": "Dataset Uid"
             },
             "description": "The unique id of the Dataset"
+          },
+          {
+            "name": "use_sponsor_model",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Whether to use the Sponsor Model to filter Codelists and Terms.\n\nIf set to True, the Sponsor Model will take precedence.\n\nDefaults to True.",
+              "default": true,
+              "title": "Use Sponsor Model"
+            },
+            "description": "Whether to use the Sponsor Model to filter Codelists and Terms.\n\nIf set to True, the Sponsor Model will take precedence.\n\nDefaults to True."
           },
           {
             "name": "sort_by",
@@ -70679,7 +70719,7 @@
           "Activities"
         ],
         "summary": "Get activity instances relevant to a specific activity version",
-        "description": "Retrieve a paginated list of activity instances that were relevant during\n    the time validity window of a *specific* version of an activity.\n\n    For each relevant instance, the latest version active during the activity's\n    version window is returned, along with all its older versions in the `children` array.\n\n    Args:\n        activity_uid: The unique ID of the activity.\n        version: The specific version of the activity (e.g., \"16.0\").\n        page_number: The page number for pagination (default: 1).\n        page_size: The number of items per page (default: 10).\n        roots_only: If true, returns only the highest version of each unique activity instance.\n                   If false, returns all versions of all activity instances.\n\n    Returns:\n        A paginated response containing activity instances relevant to the specified\n        activity version's timeframe.\n    \n\nResponse format:\n\n- In addition to retrieving data in JSON format (default behaviour), \nit is possible to request data to be returned in CSV, XML or Excel formats \nby sending the `Accept` http request header with one of the following values:\n  - `text/csv`\n\n  - `text/xml`\n\n  - `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`",
+        "description": "Retrieve a paginated list of activity instances that were relevant during\n    the time validity window of a *specific* version of an activity.\n\n    For each relevant instance, the latest version active during the activity's\n    version window is returned, along with all its older versions in the `children` array.\n\n    Args:\n        activity_uid: The unique ID of the activity.\n        version: The specific version of the activity (e.g., \"16.0\").\n        page_number: The page number for pagination (default: 1).\n        page_size: The number of items per page (default: 10).\n        flatten: If true, returns parent and child instances as separate rows (useful for exports).\n                 If false, returns hierarchical structure with children nested (default).\n\n    Returns:\n        A paginated response containing activity instances relevant to the specified\n        activity version's timeframe.\n    \n\nResponse format:\n\n- In addition to retrieving data in JSON format (default behaviour), \nit is possible to request data to be returned in CSV, XML or Excel formats \nby sending the `Accept` http request header with one of the following values:\n  - `text/csv`\n\n  - `text/xml`\n\n  - `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`",
         "operationId": "get_instances_for_specific_activity_version_concepts_activities_activities__activity_uid__versions__version__instances_get",
         "security": [
           {
@@ -70749,6 +70789,18 @@
               "title": "Page Size"
             },
             "description": "\nNumber of items to be returned per page.\n\nDefault: 10\n\nFunctionality: Provided together with `page_number`, selects the number of results per page.\n\nIn case the value is set to `0`, all rows will be returned.\n\nErrors: `page_number` not provided.\n"
+          },
+          {
+            "name": "flatten",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "If true, returns parent and child instances as separate rows. If false, returns hierarchical structure.",
+              "default": false,
+              "title": "Flatten"
+            },
+            "description": "If true, returns parent and child instances as separate rows. If false, returns hierarchical structure."
           }
         ],
         "responses": {
@@ -72820,6 +72872,25 @@
               "title": "Version"
             },
             "description": "Select specific version, omit to view latest version"
+          },
+          {
+            "name": "search_string",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Search string to filter activities by name or other fields. Case-insensitive partial match.",
+              "default": "",
+              "title": "Search String"
+            },
+            "description": "Search string to filter activities by name or other fields. Case-insensitive partial match."
           },
           {
             "name": "page_number",
@@ -88295,6 +88366,136 @@
                 "schema": {}
               },
               "application/vnd.openxmlformats-officedocument.wordprocessingml.document": {}
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/studies/{study_uid}/flowchart.xlsx": {
+      "get": {
+        "tags": [
+          "Studies"
+        ],
+        "summary": "Builds and returns an XLSX document with Protocol, Detailed or Operational SoA table with footnotes",
+        "operationId": "get_study_flowchart_xlsx_studies__study_uid__flowchart_xlsx_get",
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "study_uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique id of the study.",
+              "title": "Study Uid"
+            },
+            "description": "The unique id of the study."
+          },
+          {
+            "name": "study_value_version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9]+\\.?[0-9]*$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "If specified, study data with specified version is returned.\n\n    Only exact matches are considered. \n\n    E.g. 1, 2, 2.1, ...",
+              "title": "Study Value Version"
+            },
+            "description": "If specified, study data with specified version is returned.\n\n    Only exact matches are considered. \n\n    E.g. 1, 2, 2.1, ..."
+          },
+          {
+            "name": "time_unit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "pattern": "^(week|day)$"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "The preferred time unit, either day or week.",
+              "title": "Time Unit"
+            },
+            "description": "The preferred time unit, either day or week."
+          },
+          {
+            "name": "layout",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SoALayout",
+              "description": "The requested layout or detail level of Schedule of Activities",
+              "default": "protocol"
+            },
+            "description": "The requested layout or detail level of Schedule of Activities"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {}
             }
           },
           "403": {
@@ -140525,6 +140726,46 @@
             "type": "string",
             "title": "Name"
           },
+          "definition": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Definition",
+            "nullable": true
+          },
+          "synonyms": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Synonyms",
+            "default": [],
+            "nullable": true
+          },
+          "abbreviation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Abbreviation",
+            "nullable": true
+          },
           "is_data_collected": {
             "type": "boolean",
             "title": "Is Data Collected"
@@ -140602,6 +140843,164 @@
         },
         "type": "object",
         "title": "CompactCTTerm"
+      },
+      "CompactFootnote": {
+        "properties": {
+          "uid": {
+            "type": "string",
+            "title": "Uid"
+          },
+          "name_plain": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name Plain",
+            "nullable": true
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "nullable": true
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "nullable": true
+          },
+          "library_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Library Name"
+          },
+          "template_uid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Uid",
+            "nullable": true
+          },
+          "template_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Name",
+            "nullable": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "uid"
+        ],
+        "title": "CompactFootnote"
+      },
+      "CompactFootnoteTemplate": {
+        "properties": {
+          "uid": {
+            "type": "string",
+            "title": "Uid"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "nullable": true
+          },
+          "name_plain": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name Plain",
+            "nullable": true
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version",
+            "nullable": true
+          },
+          "library_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Library Name"
+          },
+          "parameters": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parameters"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uid"
+        ],
+        "title": "CompactFootnoteTemplate"
       },
       "CompactOdmForm": {
         "properties": {
@@ -141097,49 +141496,6 @@
         },
         "type": "object",
         "title": "CompactUnitDefinition"
-      },
-      "ComplexTemplateParameter": {
-        "properties": {
-          "name": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Name"
-          },
-          "format": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Format"
-          },
-          "parameters": {
-            "items": {
-              "$ref": "#/components/schemas/TemplateParameter"
-            },
-            "type": "array",
-            "title": "Parameters"
-          },
-          "terms": {
-            "items": {
-              "$ref": "#/components/schemas/TemplateParameterTerm"
-            },
-            "type": "array",
-            "title": "Terms",
-            "description": "The possible terms of the template parameter."
-          }
-        },
-        "type": "object",
-        "title": "ComplexTemplateParameter"
       },
       "Compound": {
         "properties": {
@@ -160523,7 +160879,14 @@
             "title": "Mandatory"
           },
           "key_sequence": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Key Sequence"
           },
           "method_oid": {
@@ -160538,15 +160901,36 @@
             "title": "Method Oid"
           },
           "imputation_method_oid": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Imputation Method Oid"
           },
           "role": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Role"
           },
           "role_codelist_oid": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Role Codelist Oid"
           },
           "collection_exception_condition_oid": {
@@ -160569,10 +160953,6 @@
           "uid",
           "order_number",
           "mandatory",
-          "key_sequence",
-          "imputation_method_oid",
-          "role",
-          "role_codelist_oid",
           "vendor"
         ],
         "title": "OdmItemGroupItemPostInput"
@@ -162216,8 +162596,7 @@
           "collection_exception_condition_oid": {
             "anyOf": [
               {
-                "type": "string",
-                "minLength": 1
+                "type": "string"
               },
               {
                 "type": "null"
@@ -163107,8 +163486,7 @@
         },
         "type": "object",
         "required": [
-          "uid",
-          "value"
+          "uid"
         ],
         "title": "OdmVendorElementRelationPostInput"
       },
@@ -163467,15 +163845,21 @@
             "title": "Uid"
           },
           "value": {
-            "type": "string",
-            "minLength": 1,
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Value"
           }
         },
         "type": "object",
         "required": [
-          "uid",
-          "value"
+          "uid"
         ],
         "title": "OdmVendorRelationPostInput"
       },
@@ -174071,7 +174455,7 @@
           "keep_old_version": {
             "type": "boolean",
             "title": "Keep Old Version",
-            "description": "Boolean indicating that someone has not updated to lates version of Activity but reviewed the changes ",
+            "description": "Boolean indicating that someone has not updated to latest version of Activity but reviewed the changes ",
             "default": false
           },
           "study_activity_uid": {
@@ -174426,7 +174810,7 @@
           "keep_old_version": {
             "type": "boolean",
             "title": "Keep Old Version",
-            "description": "Boolean indicating that someone has not updated to lates version of Activity but reviewed the changes ",
+            "description": "Boolean indicating that someone has not updated to latest version of Activity but reviewed the changes ",
             "default": false
           },
           "study_activity_uid": {
@@ -174746,6 +175130,12 @@
             "title": "Show Activity Instance In Protocol Flowchart",
             "description": "show activity instance in operational flow chart"
           },
+          "keep_old_version": {
+            "type": "boolean",
+            "title": "Keep Old Version",
+            "description": "Boolean indicating that someone has not updated to latest version of ActivityInstance but reviewed the changes ",
+            "default": false
+          },
           "study_activity_instance_uid": {
             "anyOf": [
               {
@@ -175058,6 +175448,11 @@
             "type": "boolean",
             "title": "Show Activity Instance In Protocol Flowchart",
             "description": "show activity instance in operational flow chart",
+            "default": false
+          },
+          "keep_old_version": {
+            "type": "boolean",
+            "title": "Keep Old Version",
             "default": false
           }
         },
@@ -180979,8 +181374,16 @@
             "nullable": true
           },
           "order": {
-            "type": "integer",
-            "title": "Order"
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order",
+            "nullable": true
           },
           "modified": {
             "anyOf": [
@@ -181006,7 +181409,7 @@
           "footnote": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Footnote"
+                "$ref": "#/components/schemas/CompactFootnote"
               },
               {
                 "type": "null"
@@ -181017,7 +181420,7 @@
           "template": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/FootnoteTemplate"
+                "$ref": "#/components/schemas/CompactFootnoteTemplate"
               },
               {
                 "type": "null"
@@ -181041,7 +181444,7 @@
           "latest_footnote": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Footnote"
+                "$ref": "#/components/schemas/CompactFootnote"
               },
               {
                 "type": "null"
@@ -181066,8 +181469,7 @@
         "type": "object",
         "required": [
           "uid",
-          "study_uid",
-          "order"
+          "study_uid"
         ],
         "title": "StudySoAFootnote"
       },
@@ -181274,8 +181676,16 @@
             "nullable": true
           },
           "order": {
-            "type": "integer",
-            "title": "Order"
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order",
+            "nullable": true
           },
           "modified": {
             "anyOf": [
@@ -181301,7 +181711,7 @@
           "footnote": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Footnote"
+                "$ref": "#/components/schemas/CompactFootnote"
               },
               {
                 "type": "null"
@@ -181312,7 +181722,7 @@
           "template": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/FootnoteTemplate"
+                "$ref": "#/components/schemas/CompactFootnoteTemplate"
               },
               {
                 "type": "null"
@@ -181336,7 +181746,7 @@
           "latest_footnote": {
             "anyOf": [
               {
-                "$ref": "#/components/schemas/Footnote"
+                "$ref": "#/components/schemas/CompactFootnote"
               },
               {
                 "type": "null"
@@ -181392,7 +181802,6 @@
         "required": [
           "uid",
           "study_uid",
-          "order",
           "change_type",
           "start_date",
           "changes"
@@ -182637,10 +183046,6 @@
             "title": "Epoch Uid",
             "description": "The uid of the study epoch"
           },
-          "order": {
-            "type": "integer",
-            "title": "Order"
-          },
           "visit_type": {
             "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
           },
@@ -183020,19 +183425,6 @@
             "title": "Possible Actions",
             "description": "List of actions to perform on item"
           },
-          "study_activity_count": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Study Activity Count",
-            "description": "Count of Study Activities assigned to Study Visit",
-            "nullable": true
-          },
           "change_type": {
             "anyOf": [
               {
@@ -183045,6 +183437,10 @@
             "title": "Change Type",
             "description": "Type of Action",
             "nullable": true
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order"
           }
         },
         "type": "object",
@@ -183056,7 +183452,6 @@
           "study_uid",
           "study_epoch",
           "epoch_uid",
-          "order",
           "visit_type",
           "visit_type_name",
           "visit_contact_mode_uid",
@@ -183072,7 +183467,8 @@
           "is_soa_milestone",
           "status",
           "start_date",
-          "possible_actions"
+          "possible_actions",
+          "order"
         ],
         "title": "StudyVisit"
       },
@@ -184037,10 +184433,6 @@
             "title": "Epoch Uid",
             "description": "The uid of the study epoch"
           },
-          "order": {
-            "type": "integer",
-            "title": "Order"
-          },
           "visit_type": {
             "$ref": "#/components/schemas/SimpleCTTermNameWithConflictFlag"
           },
@@ -184420,19 +184812,6 @@
             "title": "Possible Actions",
             "description": "List of actions to perform on item"
           },
-          "study_activity_count": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Study Activity Count",
-            "description": "Count of Study Activities assigned to Study Visit",
-            "nullable": true
-          },
           "change_type": {
             "anyOf": [
               {
@@ -184463,7 +184842,6 @@
           "study_uid",
           "study_epoch",
           "epoch_uid",
-          "order",
           "visit_type",
           "visit_type_name",
           "visit_contact_mode_uid",
