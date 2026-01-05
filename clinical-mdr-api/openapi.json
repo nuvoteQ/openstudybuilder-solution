@@ -1,9 +1,9 @@
 {
-  "openapi": "3.0.2",
+  "openapi": "3.1.0",
   "info": {
     "title": "StudyBuilder API",
     "description": "\n## NOTICE\n\nThis license information is applicable to the swagger documentation of the clinical-mdr-api, that is the openapi.json.\n\n## License Terms (MIT)\n\nCopyright (C) 2025 Novo Nordisk A/S, Danish company registration no. 24256790\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n\n## Licenses and Acknowledgements for Incorporated Software\n\nThis component contains software licensed under different licenses when compiled, please refer to the third-party-licenses.md file for further information and full license texts.\n\n## Authentication\n\nSupports OAuth2 [Authorization Code Flow](https://datatracker.ietf.org/doc/html/rfc6749#section-4.1),\nat paths described in the OpenID Connect Discovery metadata document (whose URL is defined by the `OAUTH_METADATA_URL` environment variable).\n\nMicrosoft Identity Platform documentation can be read \n([here](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-auth-code-flow)).\n\nAuthentication can be turned off with `OAUTH_ENABLED=false` environment variable. \n\nWhen authentication is turned on, all requests to protected API endpoints must provide a valid bearer (JWT) token inside the `Authorization` http header. \n",
-    "version": "3.0.517"
+    "version": "3.0.529"
   },
   "paths": {
     "/": {
@@ -40043,6 +40043,7 @@
           "CT Codelists"
         ],
         "summary": "List the CTTerms of a CTCodelist identified either by codelist uid, submission value or name",
+        "description": "Response format:\n\n- In addition to retrieving data in JSON format (default behaviour), \nit is possible to request data to be returned in CSV, XML or Excel formats \nby sending the `Accept` http request header with one of the following values:\n  - `text/csv`\n\n  - `text/xml`\n\n  - `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`",
         "operationId": "get_codelist_terms_by_name_or_submval_ct_codelists_terms_get",
         "security": [
           {
@@ -47988,6 +47989,169 @@
         }
       }
     },
+    "/dictionaries/substances/headers": {
+      "get": {
+        "tags": [
+          "Dictionary Terms"
+        ],
+        "summary": "Returns possibles values from the database for a given header",
+        "description": "Allowed parameters include : field name for which to get possible values, search string to provide filtering for the field name, additional filters to apply on other fields",
+        "operationId": "get_distinct_values_for_substances_header_dictionaries_substances_headers_get",
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "field_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The field name for which to lookup possible values in the database.\n\nFunctionality: searches for possible values (aka 'headers') of this field in the database.Errors: invalid field name specified",
+              "title": "Field Name"
+            },
+            "description": "The field name for which to lookup possible values in the database.\n\nFunctionality: searches for possible values (aka 'headers') of this field in the database.Errors: invalid field name specified"
+          },
+          {
+            "name": "search_string",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Optionally, a (part of the) text for a given field.\nThe query result will be values of the field that contain the provided search string.",
+              "default": "",
+              "title": "Search String"
+            },
+            "description": "Optionally, a (part of the) text for a given field.\nThe query result will be values of the field that contain the provided search string."
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "contentMediaType": "application/json",
+                  "contentSchema": {}
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+              "title": "Filters"
+            },
+            "description": "\nJSON dictionary of field names and search strings, with a choice of operators for building complex filtering queries.\n\nDefault: `{}` (no filtering).\n\nFunctionality: filters the queried entities based on the provided search strings and operators.\n\nFormat:\n`{\"field_name\":{\"v\":[\"search_str_1\", \"search_str_1\"], \"op\":\"comparison_operator\"}, \"other_field_name\":{...}}`\n\n- `v` specifies the list of values to match against the specified `field_name` field\n\n    - If multiple values are provided in the `v` list, a logical OR filtering operation will be performed using these values.\n\n- `op` specifies the type of string match/comparison operation to perform on the specified `field_name` field. Supported values are:\n\n    - `eq` (default, equals)\n\n    - `ne` (not equals)\n\n    - `co` (string contains)\n\n    - `ge` (greater or equal to)\n\n    - `gt` (greater than)\n\n    - `le` (less or equal to)\n\n    - `lt` (less than)\n\n    - `bw` (between - exactly two values are required)\n\n    - `in` (value in list).\n\n\nNote that filtering can also be performed on non-string field types. \nFor example, this works as filter on a boolean field: `{\"is_global_standard\": {\"v\": [false]}}`.\n\n\nWildcard filtering is also supported. To do this, provide `*` value for `field_name`, for example: `{\"*\":{\"v\":[\"search_string\"]}}`.\n\nWildcard only supports string search (with implicit `contains` operator) on fields of type string.\n\n\nFinally, you can filter on items that have an empty value for a field. To achieve this, set the value of `v` list to an empty array - `[]`.\n\n\nComplex filtering example:\n\n`{\"name\":{\"v\": [\"Jimbo\", \"Jumbo\"], \"op\": \"co\"}, \"start_date\": {\"v\": [\"2021-04-01T12:00:00+00.000\"], \"op\": \"ge\"}, \"*\":{\"v\": [\"wildcard_search\"], \"op\": \"co\"}}`\n\n",
+            "examples": {
+              "none": {
+                "summary": "No Filters",
+                "description": "No filters are applied.",
+                "value": {}
+              },
+              "wildcard": {
+                "summary": "Wildcard Filter",
+                "description": "Apply a wildcard filter.",
+                "value": "{\"*\":{ \"v\": [\"\"], \"op\": \"co\"}}"
+              },
+              "uid__contains": {
+                "summary": "Partial Match on UID",
+                "description": "Apply a filter to display records **containing** specified UIDs.",
+                "value": "{\"uid\":{ \"v\": [\"\"], \"op\": \"co\"}}"
+              },
+              "uid": {
+                "summary": "Exact Match on UID",
+                "description": "Apply a filter to display only those records with **exact** matching UIDs.",
+                "value": "{\"uid\":{ \"v\": [\"\"], \"op\": \"eq\"}}"
+              },
+              "name__contains": {
+                "summary": "Partial Match on Name",
+                "description": "Apply a filter to display records **containing** specified names.",
+                "value": "{\"name\":{ \"v\": [\"\"], \"op\": \"co\"}}"
+              },
+              "name": {
+                "summary": "Exact Match on Name",
+                "description": "Apply a filter to display only those records with **exact** matching names.",
+                "value": "{\"name\":{ \"v\": [\"\"], \"op\": \"eq\"}}"
+              }
+            }
+          },
+          {
+            "name": "operator",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n",
+              "default": "and",
+              "title": "Operator"
+            },
+            "description": "Specifies which logical operation - `and` or `or` - should be used in case filtering is done on several fields.\n\nDefault: `and` (all fields have to match their filter).\n\nFunctionality: `and` will return entities having all filters matching, `or` will return entities with any matches.\n\n"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Optionally, the number of results to return. Default = 10.",
+              "default": 10,
+              "title": "Page Size"
+            },
+            "description": "Optionally, the number of results to return. Default = 10."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {},
+                  "title": "Response Get Distinct Values For Substances Header Dictionaries Substances Headers Get"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found - Invalid field name specified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/dictionaries/substances/{dictionary_term_uid}": {
       "get": {
         "tags": [
@@ -50727,6 +50891,24 @@
             "description": "The unique id of the ActivityInstanceClass"
           },
           {
+            "name": "ig_uid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optionally, the uid of a specific DataModelIG, e.g. SDTMIG",
+              "title": "Ig Uid"
+            },
+            "description": "Optionally, the uid of a specific DataModelIG, e.g. SDTMIG"
+          },
+          {
             "name": "dataset_uid",
             "in": "query",
             "required": false,
@@ -52640,6 +52822,24 @@
               "title": "Use Sponsor Model"
             },
             "description": "Whether to use the Sponsor Model to filter Codelists and Terms.\n\nIf set to True, the Sponsor Model will take precedence.\n\nDefaults to True."
+          },
+          {
+            "name": "ct_catalogue_name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Optionally, the name of a CT Catalogue to filter Codelists.",
+              "title": "Ct Catalogue Name"
+            },
+            "description": "Optionally, the name of a CT Catalogue to filter Codelists."
           },
           {
             "name": "sort_by",
@@ -78382,76 +78582,6 @@
             }
           }
         }
-      },
-      "post": {
-        "tags": [
-          "Study Selections"
-        ],
-        "summary": "Creating a study data supplier selection based on the input data",
-        "operationId": "create_a_new_study_data_supplier_selection_studies__study_uid__study_data_suppliers_post",
-        "security": [
-          {
-            "OAuth2AuthorizationCodeBearer": []
-          },
-          {
-            "BearerJwtAuth": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "study_uid",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "description": "The unique id of the study.",
-              "title": "Study Uid"
-            },
-            "description": "The unique id of the study."
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/StudySelectionDataSupplierInput"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Successful Response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StudySelectionDataSupplier"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/studies/{study_uid}/study-data-suppliers/headers": {
@@ -78787,6 +78917,83 @@
           },
           "404": {
             "description": "Entity not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/studies/{study_uid}/study-data-suppliers/sync": {
+      "put": {
+        "tags": [
+          "Study Selections"
+        ],
+        "summary": "Sync study data suppliers to match the desired state",
+        "description": "Accepts a list of data suppliers and syncs the study to match.\n    Validates all inputs first - if duplicates or invalid suppliers are found,\n    rejects the entire request with an error. No changes are made unless all validation passes.",
+        "operationId": "sync_study_data_suppliers_studies__study_uid__study_data_suppliers_sync_put",
+        "security": [
+          {
+            "OAuth2AuthorizationCodeBearer": []
+          },
+          {
+            "BearerJwtAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "study_uid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The unique id of the study.",
+              "title": "Study Uid"
+            },
+            "description": "The unique id of the study."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudySelectionDataSupplierSyncInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudySelectionDataSupplier"
+                  },
+                  "title": "Response Sync Study Data Suppliers Studies  Study Uid  Study Data Suppliers Sync Put"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
             "content": {
               "application/json": {
                 "schema": {
@@ -127763,6 +127970,17 @@
               }
             ],
             "title": "Codelist Uid"
+          },
+          "submission_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submission Value"
           }
         },
         "type": "object",
@@ -128792,6 +129010,18 @@
               }
             ],
             "title": "Name",
+            "nullable": true
+          },
+          "submission_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Submission Value",
             "nullable": true
           }
         },
@@ -167868,6 +168098,24 @@
         ],
         "title": "StudySelectionDataSupplierNewOrder"
       },
+      "StudySelectionDataSupplierSyncInput": {
+        "properties": {
+          "suppliers": {
+            "items": {
+              "$ref": "#/components/schemas/StudySelectionDataSupplierInput"
+            },
+            "type": "array",
+            "title": "Suppliers",
+            "description": "List of data suppliers to sync"
+          }
+        },
+        "type": "object",
+        "required": [
+          "suppliers"
+        ],
+        "title": "StudySelectionDataSupplierSyncInput",
+        "description": "Input model for syncing study data suppliers.\n\nAccepts a list of data suppliers to set for the study.\nThe API will validate all items, then create/delete as needed."
+      },
       "StudySelectionDiseaseMilestoneNewOrder": {
         "properties": {
           "new_order": {
@@ -178356,6 +178604,12 @@
             "type": "boolean",
             "title": "Is Data Collected",
             "description": "Specifies if Activity is meant for data collection"
+          },
+          "is_request_final": {
+            "type": "boolean",
+            "title": "Is Request Final",
+            "description": "Specifies if the activity request has been submitted",
+            "default": false
           }
         },
         "type": "object",
