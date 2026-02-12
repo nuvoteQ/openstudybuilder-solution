@@ -1,6 +1,6 @@
 # Overview
 
-This repository contains an API providing read/write access to Clinical MDR (Clinical Metadata Repository) stored in a neo4j database.
+This repository contains the OpenStudyBuilder API providing read/write access to clinical metadata stored in a neo4j database.
 
 
 # Technology stack
@@ -41,7 +41,7 @@ Notes:
   OAUTH_API_APP_SECRET='***REMOVED***'
   MS_GRAPH_INTEGRATION_ENABLED=true
   # optional, for MS Graph API integration: filter expression for group discovery  #
-  MS_GRAPH_GROUPS_QUERY="$filter=startsWith(displayName, 'StudyBuilder')"
+  MS_GRAPH_GROUPS_QUERY="$filter=startsWith(displayName, 'OpenStudyBuilder')"
   
   # required for the FastAPI-built-in Swagger UI only #
   OAUTH_SWAGGER_APP_ID='***REMOVED***'
