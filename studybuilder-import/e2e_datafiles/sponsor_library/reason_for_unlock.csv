@@ -1,0 +1,4 @@
+CODELIST_SUBMVAL,SPONSOR_NAME,SPONSOR_NAME_SENTENCE_CASE,TERM_SUBMVAL,DEFINITION,ORDER,CONCEPT_ID,CATALOGUES,NCI_PREFERRED_NAME
+RSNFUL,Study Specification Updates,study specification updates,STUDY_SPECIFICATION_UPDATES,Reason for unlocking study for study specification updates,1,,,Study Specification Updates
+RSNFUL,Protocol Amendment Updates,protocol amendment updates,PROTOCOL_AMENDMENT_UPDATES,Reason for unlocking study for protocol amendment updates,2,,,Protocol Amendment Updates
+RSNFUL,Other,other,OTHER,Other reason for unlocking study,3,,,Other

@@ -1,0 +1,7 @@
+CODELIST_SUBMVAL,SPONSOR_NAME,SPONSOR_NAME_SENTENCE_CASE,TERM_SUBMVAL,DEFINITION,ORDER,CONCEPT_ID,CATALOGUES,NCI_PREFERRED_NAME
+RSNFL,PORT Approval,port approval,PORT_APPROVAL,Reason for locking study after PORT approval,1,,,PORT Approval
+RSNFL,PORT Submission,port submission,PORT_SUBMISSION,Reason for locking study after PORT submission,2,,,PORT Submission
+RSNFL,Protocol QC,protocol qc,PROTOCOL_QC,Reason for locking study after protocol quality control,3,,,Protocol QC
+RSNFL,Final Protocol,final protocol,FINAL_PROTOCOL,Reason for locking study after final protocol completion,4,,,Final Protocol
+RSNFL,Study Specification Updates,study specification updates,STUDY_SPECIFICATION_UPDATES,Reason for locking study after study specification updates,5,,,Study Specification Updates
+RSNFL,Other,other,OTHER,Other reason for locking study,6,,,Other
